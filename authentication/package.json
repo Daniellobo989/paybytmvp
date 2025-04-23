@@ -1,0 +1,29 @@
+{
+  "name": "paybyt-auth-backend",
+  "version": "0.1.0",
+  "description": "Backend para o Sistema de Autenticação Anônima do PayByt",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.12",
+    "jsonwebtoken": "^8.5.1",
+    "libsodium-wrappers": "^0.7.9",
+    "snarkjs": "^0.4.10",
+    "circomlib": "^2.0.3",
+    "bitcoinjs-lib": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "helmet": "^4.6.0"
+  },
+  "devDependencies": {
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.14",
+    "eslint": "^8.1.0",
+    "supertest": "^6.1.6"
+  }
+}
