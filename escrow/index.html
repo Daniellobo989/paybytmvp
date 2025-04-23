@@ -1,14 +1,275 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PayByt - Marketplace Descentralizado com Bitcoin</title>
-    <meta name="description" content="Marketplace descentralizado com Bitcoin como única forma de pagamento. Compre e venda com segurança usando escrow multisig." />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayByt - Sistema de Escrow Multisig com Bitcoin</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .bg-primary { background-color: #002D72; }
+    .bg-primary-dark { background-color: #001d4a; }
+    .bg-primary-light { background-color: #1a4a8f; }
+    .bg-bitcoin { background-color: #F7931A; }
+    .bg-bitcoin-dark { background-color: #d97908; }
+    .bg-bitcoin-light { background-color: #f9a94d; }
+    .text-primary { color: #002D72; }
+    .text-bitcoin { color: #F7931A; }
+    .border-primary { border-color: #002D72; }
+    .border-bitcoin { border-color: #F7931A; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <header class="bg-primary text-white shadow-md">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="#" class="text-2xl font-bold flex items-center">
+        PayByt <span class="text-bitcoin ml-1">₿</span>
+      </a>
+      <nav class="space-x-4">
+        <a href="#" class="hover:text-gray-200">Início</a>
+        <a href="#escrow" class="hover:text-gray-200">Escrow</a>
+        <a href="#docs" class="hover:text-gray-200">Documentação</a>
+      </nav>
+    </div>
+  </header>
+  
+  <main class="flex-grow">
+    <!-- Hero Section -->
+    <section class="py-12 md:py-20 bg-gradient-to-r from-primary to-primary-dark text-white">
+      <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Sistema de Escrow Multisig com Bitcoin</h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+          Realize transações seguras usando nosso sistema de escrow multisig 2-de-3.
+          Seus fundos permanecem protegidos até que ambas as partes concordem com a conclusão da transação.
+        </p>
+        <a 
+          href="#escrow" 
+          class="inline-block bg-bitcoin text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-bitcoin-dark transition duration-300"
+        >
+          Começar Agora
+        </a>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Como Funciona</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+            <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4 mx-auto">1</div>
+            <h3 class="text-xl font-bold text-center mb-4">Criação do Escrow</h3>
+            <p class="text-gray-600 text-center">
+              O comprador cria um escrow multisig 2-de-3 com as chaves do comprador, vendedor e mediador (PayByt).
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+            <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4 mx-auto">2</div>
+            <h3 class="text-xl font-bold text-center mb-4">Depósito de Fundos</h3>
+            <p class="text-gray-600 text-center">
+              O comprador deposita Bitcoin no endereço multisig. Os fundos ficam bloqueados até a conclusão da transação.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+            <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mb-4 mx-auto">3</div>
+            <h3 class="text-xl font-bold text-center mb-4">Liberação de Fundos</h3>
+            <p class="text-gray-600 text-center">
+              Após receber o produto/serviço, o comprador libera os fundos para o vendedor. Em caso de disputa, o mediador intervém.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Escrow Section -->
+    <section id="escrow" class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Sistema de Escrow</h2>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+          <h3 class="text-xl font-bold mb-4">Criar Novo Escrow</h3>
+          
+          <form class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-gray-700 font-medium mb-2">Endereço Bitcoin do Comprador</label>
+                <input
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Deixe em branco para gerar um novo"
+                />
+                <p class="text-sm text-gray-500 mt-1">
+                  Deixe em branco para gerar um novo par de chaves.
+                </p>
+              </div>
+              <div>
+                <label class="block text-gray-700 font-medium mb-2">Endereço Bitcoin do Vendedor</label>
+                <input
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="bc1q..."
+                  required
+                />
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 font-medium mb-2">Valor em Bitcoin</label>
+              <div class="relative">
+                <input
+                  type="text"
+                  class="w-full px-3 py-2 pl-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="0.001"
+                  required
+                />
+                <span class="absolute left-3 top-2 text-gray-500">₿</span>
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 font-medium mb-2">Descrição da Transação</label>
+              <textarea
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent min-h-[100px]"
+                placeholder="Descreva o produto ou serviço sendo negociado..."
+                required
+              ></textarea>
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 font-medium mb-2">Período de Timelock</label>
+              <select
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                required
+              >
+                <option value="24">24 horas</option>
+                <option value="48" selected>48 horas</option>
+                <option value="72">72 horas</option>
+                <option value="168">1 semana</option>
+              </select>
+              <p class="text-sm text-gray-500 mt-1">
+                Após este período, os fundos podem ser devolvidos ao comprador se não houver acordo.
+              </p>
+            </div>
+            
+            <div class="pt-4">
+              <button 
+                type="submit" 
+                class="w-full py-3 px-4 bg-primary text-white hover:bg-primary-dark rounded-md font-medium transition-colors"
+              >
+                Criar Escrow Multisig
+              </button>
+            </div>
+          </form>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <h3 class="text-xl font-bold mb-4">Visualizar Escrow Existente</h3>
+          
+          <form class="mb-6">
+            <div class="flex flex-col md:flex-row gap-4">
+              <input
+                type="text"
+                class="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Digite o ID do escrow (ex: ESC12345)"
+                required
+              />
+              <button 
+                type="submit" 
+                class="px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded-md font-medium transition-colors md:w-auto"
+              >
+                Buscar Escrow
+              </button>
+            </div>
+          </form>
+          
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h4 class="text-lg font-bold mb-4">Como visualizar um escrow?</h4>
+            <p class="mb-4">
+              Para visualizar os detalhes de um escrow existente, você precisa do ID do escrow.
+              O ID é fornecido no momento da criação do escrow e também é enviado por e-mail para as partes envolvidas.
+            </p>
+            <p>
+              Digite o ID do escrow no formato <code class="bg-gray-200 px-2 py-1 rounded">ESC12345</code> e clique em "Buscar Escrow".
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="docs" class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Documentação</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold mb-4">Manual do Usuário</h3>
+            <p class="text-gray-600 mb-6">
+              Guia completo sobre como utilizar o sistema de escrow multisig, incluindo criação de escrows, confirmação de entrega e liberação de fundos.
+            </p>
+            <a 
+              href="docs/manual_usuario.html" 
+              class="inline-block bg-primary text-white font-medium py-2 px-4 rounded hover:bg-primary-dark transition-colors"
+              target="_blank"
+            >
+              Ver Manual
+            </a>
+          </div>
+          
+          <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold mb-4">Documentação Técnica</h3>
+            <p class="text-gray-600 mb-6">
+              Detalhes técnicos sobre a implementação do sistema, incluindo arquitetura, fluxos de operação e considerações de segurança.
+            </p>
+            <a 
+              href="docs/documentacao_tecnica.html" 
+              class="inline-block bg-primary text-white font-medium py-2 px-4 rounded hover:bg-primary-dark transition-colors"
+              target="_blank"
+            >
+              Ver Documentação
+            </a>
+          </div>
+          
+          <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold mb-4">Guia de Instalação</h3>
+            <p class="text-gray-600 mb-6">
+              Instruções passo a passo para instalar e configurar o sistema de escrow multisig em seu próprio ambiente.
+            </p>
+            <a 
+              href="docs/guia_instalacao.html" 
+              class="inline-block bg-primary text-white font-medium py-2 px-4 rounded hover:bg-primary-dark transition-colors"
+              target="_blank"
+            >
+              Ver Guia
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <footer class="bg-gray-800 text-white py-8">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between">
+        <div class="mb-4 md:mb-0">
+          <h3 class="text-xl font-bold mb-2">PayByt</h3>
+          <p class="text-gray-400">Marketplace descentralizado com Bitcoin</p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold mb-2">Links</h4>
+          <ul class="space-y-1">
+            <li><a href="#" class="text-gray-400 hover:text-white">Início</a></li>
+            <li><a href="#escrow" class="text-gray-400 hover:text-white">Escrow</a></li>
+            <li><a href="#docs" class="text-gray-400 hover:text-white">Documentação</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+        <p>&copy; 2025 PayByt. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+</body>
 </html>
