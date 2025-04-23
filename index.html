@@ -1,15 +1,164 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="PayByt - Marketplace Descentralizado com Bitcoin" />
-    <title>PayByt - Marketplace Descentralizado com Bitcoin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayByt - Marketplace Descentralizado com Bitcoin</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      background-color: #002D72;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .logo {
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
+    .hero {
+      background-color: #f0f0f0;
+      padding: 50px 20px;
+      text-align: center;
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin: 40px 0;
+    }
+    .feature {
+      flex-basis: 30%;
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .bitcoin-accent {
+      color: #F7931A;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #F7931A;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+      background-color: #e67e00;
+    }
+    footer {
+      background-color: #002D72;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
+    @media (max-width: 768px) {
+      .feature {
+        flex-basis: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <img src="https://raw.githubusercontent.com/Daniellobo989/paybytmvp/main/public/logo.png" alt="PayByt Logo" class="logo">
+      <h1>PayByt</h1>
+    </div>
+  </header>
+  
+  <section class="hero">
+    <div class="container">
+      <h1>Bem-vindo ao <span class="bitcoin-accent">PayByt</span></h1>
+      <h2>Marketplace Descentralizado com Bitcoin</h2>
+      <p>Compre e venda com segurança usando apenas Bitcoin como forma de pagamento.</p>
+      <a href="#features" class="cta-button">Conheça as Funcionalidades</a>
+    </div>
+  </section>
+  
+  <div class="container" id="features">
+    <h2 style="text-align: center; margin: 40px 0;">Funcionalidades Principais</h2>
+    <div class="features">
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Autenticação Anônima</h3>
+        <p>Registre-se e faça login sem fornecer informações pessoais identificáveis, garantindo sua privacidade.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Escrow Multisig</h3>
+        <p>Transações seguras com contratos multisig 2-de-3 para proteção de compradores e vendedores.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Pagamentos em Bitcoin</h3>
+        <p>Suporte para transações on-chain e Lightning Network para pagamentos rápidos e com baixas taxas.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Chat Criptografado</h3>
+        <p>Comunicação segura entre compradores e vendedores para negociação de detalhes.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Resolução de Disputas</h3>
+        <p>Sistema de mediação imparcial quando necessário para resolver conflitos entre as partes.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Privacidade e Segurança</h3>
+        <p>Projetado para oferecer máxima privacidade e segurança em todas as transações.</p>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin: 60px 0; padding: 30px; background-color: #f9f9f9; border-radius: 10px;">
+      <h2>Versão MVP em Desenvolvimento</h2>
+      <p>O PayByt está atualmente em fase de desenvolvimento. Esta página é uma prévia do marketplace descentralizado que estamos construindo.</p>
+      <p>Em breve, você poderá comprar e vender produtos e serviços usando exclusivamente Bitcoin como forma de pagamento, com todas as vantagens de um sistema descentralizado.</p>
+      <a href="#" class="cta-button">Inscreva-se para Atualizações</a>
+    </div>
+    
+    <div style="text-align: center; margin: 40px 0;">
+      <h2>Por que escolher o PayByt?</h2>
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-top: 30px;">
+        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <h3>Sem Intermediários</h3>
+          <p>Transações diretas entre compradores e vendedores, sem taxas de intermediários.</p>
+        </div>
+        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <h3>Proteção de Fundos</h3>
+          <p>Sistema de escrow multisig garante que o dinheiro só é liberado quando ambas as partes estão satisfeitas.</p>
+        </div>
+        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <h3>Anonimato</h3>
+          <p>Compre e venda sem revelar sua identidade, mantendo sua privacidade.</p>
+        </div>
+        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <h3>Resistente à Censura</h3>
+          <p>Sistema descentralizado que não pode ser censurado ou controlado por governos ou corporações.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 PayByt - Todos os direitos reservados</p>
+      <p>O marketplace descentralizado com Bitcoin como única forma de pagamento</p>
+    </div>
+  </footer>
+</body>
 </html>
