@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual do Usuário - Sistema de Escrow Multisig com Bitcoin</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .bg-primary { background-color: #002D72; }
+    .text-primary { color: #002D72; }
+    .border-primary { border-color: #002D72; }
+    .bg-bitcoin { background-color: #F7931A; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <header class="bg-primary text-white shadow-md">
+    <div class="container mx-auto px-4 py-4">
+      <h1 class="text-2xl font-bold">Manual do Usuário - Sistema de Escrow Multisig com Bitcoin</h1>
+    </div>
+  </header>
+  
+  <main class="container mx-auto px-4 py-8">
+    <div class="bg-white p-8 rounded-lg shadow-md">
+      <h2 class="text-2xl font-bold mb-6">Introdução</h2>
+      <p class="mb-4">
+        Bem-vindo ao sistema de escrow multisig com Bitcoin do PayByt! Este manual irá guiá-lo através das funcionalidades do sistema e como utilizá-las para realizar transações seguras.
+      </p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">O que é um Escrow Multisig?</h2>
+      <p class="mb-4">
+        Um escrow multisig (multi-assinatura) é um sistema que utiliza endereços Bitcoin especiais que requerem múltiplas assinaturas para movimentar fundos. No nosso caso, utilizamos um esquema 2-de-3, onde três partes estão envolvidas:
+      </p>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li><strong>Comprador</strong>: Quem envia o pagamento</li>
+        <li><strong>Vendedor</strong>: Quem recebe o pagamento após entregar o produto/serviço</li>
+        <li><strong>Mediador</strong> (PayByt): Um terceiro imparcial que intervém apenas em caso de disputas</li>
+      </ol>
+      <p class="mb-4">
+        Para liberar os fundos, são necessárias 2 das 3 assinaturas, o que garante segurança e flexibilidade.
+      </p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Como Funciona</h2>
+      
+      <h3 class="text-xl font-bold mt-6 mb-4">Fluxo Básico</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>O comprador cria um escrow e envia Bitcoin para o endereço multisig</li>
+        <li>O vendedor envia o produto ou presta o serviço</li>
+        <li>O comprador confirma o recebimento</li>
+        <li>Os fundos são liberados para o vendedor</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Em Caso de Disputas</h3>
+      <p class="mb-4">
+        Se houver problemas com a transação:
+      </p>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Qualquer parte pode abrir uma disputa</li>
+        <li>O mediador (PayByt) analisa o caso</li>
+        <li>O mediador decide para onde os fundos devem ir</li>
+        <li>Os fundos são liberados conforme a decisão</li>
+      </ol>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Guia Passo a Passo</h2>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Criar um Novo Escrow</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Acesse a página "Escrow" e selecione a aba "Criar Escrow"</li>
+        <li>Preencha os campos:
+          <ul class="list-disc pl-6 mt-2 space-y-1">
+            <li><strong>Endereço Bitcoin do Comprador</strong>: Seu endereço Bitcoin ou deixe em branco para gerar um novo</li>
+            <li><strong>Endereço Bitcoin do Vendedor</strong>: Endereço Bitcoin do vendedor</li>
+            <li><strong>Valor em Bitcoin</strong>: Quantidade de BTC a ser enviada</li>
+            <li><strong>Descrição da Transação</strong>: Detalhes sobre o produto ou serviço</li>
+            <li><strong>Período de Timelock</strong>: Tempo após o qual os fundos podem ser devolvidos automaticamente</li>
+          </ul>
+        </li>
+        <li>Clique em "Criar Escrow Multisig"</li>
+        <li>Se um novo par de chaves for gerado, faça o download da chave privada e guarde-a em local seguro</li>
+        <li>Envie a quantidade exata de Bitcoin para o endereço multisig gerado</li>
+        <li>Clique em "Verificar Financiamento" para confirmar que os fundos foram recebidos</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Visualizar e Gerenciar um Escrow</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Acesse a página "Escrow" e selecione a aba "Visualizar Escrow"</li>
+        <li>Digite o ID do escrow (formato ESC12345) e clique em "Buscar Escrow"</li>
+        <li>Você verá os detalhes completos do escrow, incluindo status, endereços e valores</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Confirmar Recebimento do Produto/Serviço</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Na página de visualização do escrow, clique em "Confirmar Recebimento do Produto/Serviço"</li>
+        <li>Isso mudará o status do escrow para "Em Andamento"</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Liberar Fundos para o Vendedor</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Na página de visualização do escrow, insira sua chave privada no campo apropriado</li>
+        <li>Clique em "Liberar Fundos para Vendedor"</li>
+        <li>Os fundos serão transferidos para o endereço do vendedor</li>
+        <li>O status do escrow será atualizado para "Concluído"</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Reembolsar o Comprador</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Na página de visualização do escrow, insira sua chave privada no campo apropriado</li>
+        <li>Clique em "Reembolsar Comprador"</li>
+        <li>Os fundos serão devolvidos ao endereço do comprador</li>
+        <li>O status do escrow será atualizado para "Reembolsado"</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Abrir uma Disputa</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Na página de visualização do escrow, clique em "Abrir Disputa"</li>
+        <li>Descreva o motivo da disputa no campo que aparece</li>
+        <li>Clique em "Confirmar"</li>
+        <li>O status do escrow será atualizado para "Em Disputa"</li>
+        <li>Um mediador da PayByt analisará o caso e tomará uma decisão</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Visualizar Histórico de Escrows</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Acesse a página "Escrow" e selecione a aba "Histórico"</li>
+        <li>Você verá uma lista de todos os seus escrows</li>
+        <li>Use os filtros para visualizar escrows específicos (Todos, Ativos, Concluídos)</li>
+        <li>Clique em "Ver Detalhes" para acessar informações completas de um escrow específico</li>
+      </ol>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Dicas de Segurança</h2>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li><strong>Guarde suas chaves privadas em local seguro</strong>: Elas são necessárias para movimentar os fundos</li>
+        <li><strong>Verifique sempre os endereços Bitcoin</strong>: Confirme que os endereços estão corretos antes de enviar fundos</li>
+        <li><strong>Mantenha o ID do escrow</strong>: Você precisará dele para acessar e gerenciar seu escrow</li>
+        <li><strong>Descreva claramente a transação</strong>: Uma descrição detalhada ajuda em caso de disputas</li>
+        <li><strong>Confirme o recebimento apenas após verificar o produto/serviço</strong>: Uma vez confirmado, você está indicando que está satisfeito</li>
+      </ol>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Perguntas Frequentes</h2>
+      
+      <h3 class="text-xl font-bold mt-6 mb-2">O que acontece se eu perder minha chave privada?</h3>
+      <p class="mb-4">
+        Se você perder sua chave privada, ainda será possível movimentar os fundos com a combinação das outras duas chaves (vendedor + mediador ou comprador + mediador).
+      </p>
+
+      <h3 class="text-xl font-bold mt-6 mb-2">Quanto tempo leva para os fundos serem liberados?</h3>
+      <p class="mb-4">
+        A liberação dos fundos é quase instantânea após a confirmação e assinatura da transação. No entanto, a transação ainda precisa ser confirmada na rede Bitcoin, o que pode levar de 10 minutos a algumas horas.
+      </p>
+
+      <h3 class="text-xl font-bold mt-6 mb-2">Há taxas para usar o sistema de escrow?</h3>
+      <p class="mb-4">
+        Atualmente, o sistema está em fase de testes e não há taxas além das taxas normais da rede Bitcoin para processar as transações.
+      </p>
+
+      <h3 class="text-xl font-bold mt-6 mb-2">Como funciona o período de timelock?</h3>
+      <p class="mb-4">
+        O timelock define um período após o qual os fundos podem ser devolvidos ao comprador se não houver acordo. Isso protege o comprador em caso de não entrega do produto/serviço.
+      </p>
+
+      <h3 class="text-xl font-bold mt-6 mb-2">O sistema é seguro?</h3>
+      <p class="mb-4">
+        Sim, o sistema utiliza tecnologia multisig da rede Bitcoin, que é altamente segura. Além disso, as chaves privadas são armazenadas apenas no navegador do cliente, nunca em nossos servidores.
+      </p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Suporte</h2>
+      <p class="mb-4">
+        Se você tiver dúvidas ou precisar de ajuda, entre em contato com nossa equipe de suporte:
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li><strong>Email</strong>: suporte@paybyt.com</li>
+        <li><strong>Chat</strong>: Disponível no canto inferior direito da página</li>
+        <li><strong>Horário de atendimento</strong>: Segunda a sexta, das 9h às 18h</li>
+      </ul>
+    </div>
+  </main>
+  
+  <footer class="bg-gray-800 text-white py-6">
+    <div class="container mx-auto px-4 text-center">
+      <p>&copy; 2025 PayByt. Todos os direitos reservados.</p>
+      <p class="mt-2">
+        <a href="../index.html" class="text-gray-400 hover:text-white">Voltar para a página inicial</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

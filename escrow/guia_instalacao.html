@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia de Instalação - Sistema de Escrow Multisig com Bitcoin</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .bg-primary { background-color: #002D72; }
+    .text-primary { color: #002D72; }
+    .border-primary { border-color: #002D72; }
+    pre { background-color: #f7f7f7; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+    code { font-family: monospace; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <header class="bg-primary text-white shadow-md">
+    <div class="container mx-auto px-4 py-4">
+      <h1 class="text-2xl font-bold">Guia de Instalação - Sistema de Escrow Multisig com Bitcoin</h1>
+    </div>
+  </header>
+  
+  <main class="container mx-auto px-4 py-8">
+    <div class="bg-white p-8 rounded-lg shadow-md">
+      <p class="mb-6">
+        Este guia fornece instruções passo a passo para instalar e configurar o sistema de escrow multisig com Bitcoin do PayByt.
+      </p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Pré-requisitos</h2>
+      <p class="mb-4">
+        Antes de começar, certifique-se de ter instalado:
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>Node.js (versão 18 ou superior)</li>
+        <li>npm (normalmente instalado com o Node.js)</li>
+        <li>Git</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Instalação</h2>
+      
+      <h3 class="text-xl font-bold mt-6 mb-4">1. Clone o Repositório</h3>
+      <pre><code>git clone https://github.com/Daniellobo989/paybytmvp.git
+cd paybytmvp</code></pre>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">2. Instale as Dependências</h3>
+      <pre><code>npm install</code></pre>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">3. Configure as Variáveis de Ambiente</h3>
+      <p class="mb-4">
+        Crie um arquivo <code>.env</code> na raiz do projeto com o seguinte conteúdo:
+      </p>
+      <pre><code>VITE_BTCPAY_SERVER_URL=https://testnet.demo.btcpayserver.org
+VITE_BTCPAY_STORE_ID=AYkzTyGM1vE4LQxWvVJcgS
+VITE_BITCOIN_NETWORK=testnet</code></pre>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">4. Inicie o Servidor de Desenvolvimento</h3>
+      <pre><code>npm run dev</code></pre>
+      <p class="mb-4">
+        O servidor estará disponível em <code>http://localhost:3000</code>.
+      </p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Configuração para Produção</h2>
+      
+      <h3 class="text-xl font-bold mt-6 mb-4">1. Construa a Versão de Produção</h3>
+      <pre><code>npm run build</code></pre>
+      <p class="mb-4">
+        Isso criará uma pasta <code>dist</code> com os arquivos otimizados para produção.
+      </p>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">2. Teste a Versão de Produção Localmente</h3>
+      <pre><code>npm run preview</code></pre>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">3. Implante em um Servidor Web</h3>
+      <p class="mb-4">
+        Você pode implantar os arquivos da pasta <code>dist</code> em qualquer servidor web estático, como:
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>GitHub Pages</li>
+        <li>Netlify</li>
+        <li>Vercel</li>
+        <li>Amazon S3</li>
+        <li>Servidor Apache/Nginx</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Integração com BTCPay Server</h2>
+      <p class="mb-4">
+        Para utilizar o sistema com um BTCPay Server real:
+      </p>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Configure seu próprio servidor BTCPay ou use um serviço hospedado</li>
+        <li>Crie uma loja no BTCPay Server</li>
+        <li>Gere uma chave de API com permissões para criar faturas</li>
+        <li>Atualize as variáveis de ambiente com suas próprias credenciais</li>
+      </ol>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Configuração da Rede Bitcoin</h2>
+      <p class="mb-4">
+        Por padrão, o sistema está configurado para usar a rede de teste do Bitcoin (testnet). Para usar a rede principal:
+      </p>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Altere a variável de ambiente <code>VITE_BITCOIN_NETWORK</code> para <code>mainnet</code></li>
+        <li>Atualize a configuração do BTCPay Server para usar a rede principal</li>
+        <li>Certifique-se de testar exaustivamente antes de usar com Bitcoin real</li>
+      </ol>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Solução de Problemas</h2>
+      
+      <h3 class="text-xl font-bold mt-6 mb-4">Problemas com Dependências</h3>
+      <p class="mb-4">
+        Se encontrar problemas com as dependências, tente:
+      </p>
+      <pre><code>npm clean-install</code></pre>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Erros de Compilação</h3>
+      <p class="mb-4">
+        Se encontrar erros durante a compilação:
+      </p>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Verifique se todas as dependências estão instaladas</li>
+        <li>Verifique se as versões do Node.js e npm são compatíveis</li>
+        <li>Limpe o cache do npm: <code>npm cache clean --force</code></li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Problemas de Conexão com BTCPay Server</h3>
+      <p class="mb-4">
+        Se não conseguir conectar ao BTCPay Server:
+      </p>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Verifique se as credenciais estão corretas</li>
+        <li>Confirme se o servidor está acessível a partir do seu ambiente</li>
+        <li>Verifique os logs do console para mensagens de erro específicas</li>
+      </ol>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Recursos Adicionais</h2>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li><a href="documentacao_tecnica.html" class="text-blue-600 hover:underline">Documentação Técnica</a></li>
+        <li><a href="manual_usuario.html" class="text-blue-600 hover:underline">Manual do Usuário</a></li>
+        <li><a href="https://docs.btcpayserver.org/" class="text-blue-600 hover:underline" target="_blank">Documentação do BTCPay Server</a></li>
+        <li><a href="https://github.com/bitcoinjs/bitcoinjs-lib" class="text-blue-600 hover:underline" target="_blank">Documentação do bitcoinjs-lib</a></li>
+      </ul>
+    </div>
+  </main>
+  
+  <footer class="bg-gray-800 text-white py-6">
+    <div class="container mx-auto px-4 text-center">
+      <p>&copy; 2025 PayByt. Todos os direitos reservados.</p>
+      <p class="mt-2">
+        <a href="../index.html" class="text-gray-400 hover:text-white">Voltar para a página inicial</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

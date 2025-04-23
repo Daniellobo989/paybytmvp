@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentação Técnica - Sistema de Escrow Multisig com Bitcoin</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .bg-primary { background-color: #002D72; }
+    .text-primary { color: #002D72; }
+    .border-primary { border-color: #002D72; }
+    pre { background-color: #f7f7f7; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+    code { font-family: monospace; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <header class="bg-primary text-white shadow-md">
+    <div class="container mx-auto px-4 py-4">
+      <h1 class="text-2xl font-bold">Documentação Técnica - Sistema de Escrow Multisig com Bitcoin</h1>
+    </div>
+  </header>
+  
+  <main class="container mx-auto px-4 py-8">
+    <div class="bg-white p-8 rounded-lg shadow-md">
+      <h2 class="text-2xl font-bold mb-6">Visão Geral</h2>
+      <p class="mb-4">
+        O sistema de escrow multisig com Bitcoin do PayByt é uma solução que permite transações seguras entre compradores e vendedores, utilizando endereços multisig 2-de-3 na rede Bitcoin. Este documento descreve a implementação técnica do sistema, incluindo a arquitetura, os componentes principais e os fluxos de operação.
+      </p>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Arquitetura</h2>
+      <p class="mb-4">
+        O sistema foi implementado utilizando uma arquitetura de frontend modular com React e TypeScript, com os seguintes componentes principais:
+      </p>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Serviços</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li><strong>bitcoinService.ts</strong>: Responsável pela integração com a rede Bitcoin</li>
+        <li><strong>escrowService.ts</strong>: Gerencia o ciclo de vida dos escrows</li>
+        <li><strong>bitcoinPaymentService.ts</strong>: Integra com BTCPay Server para processamento de pagamentos</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Componentes de Frontend</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li><strong>EscrowCreator</strong>: Interface para criação de novos escrows</li>
+        <li><strong>EscrowViewer</strong>: Interface para visualização e gerenciamento de escrows existentes</li>
+        <li><strong>EscrowHistory</strong>: Interface para listagem do histórico de escrows</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Páginas</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li><strong>HomePage</strong>: Página inicial com informações sobre o sistema</li>
+        <li><strong>EscrowPage</strong>: Página principal que integra os componentes de escrow</li>
+      </ol>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Detalhes de Implementação</h2>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">bitcoinService.ts</h3>
+      <p class="mb-4">
+        Este serviço implementa as funcionalidades de baixo nível para interação com a rede Bitcoin:
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>Criação de endereços multisig P2SH (2-de-3)</li>
+        <li>Geração de pares de chaves Bitcoin</li>
+        <li>Verificação de saldos e transações</li>
+        <li>Criação e transmissão de transações</li>
+      </ul>
+
+      <pre><code>// Exemplo de criação de endereço multisig
+createMultisigAddress(
+  buyerPubKey: string,
+  sellerPubKey: string,
+  mediatorPubKey: string
+): MultisigAddress {
+  // Implementação usando bitcoinjs-lib
+  const pubkeys = [
+    Buffer.from(buyerPubKey, 'hex'),
+    Buffer.from(sellerPubKey, 'hex'),
+    Buffer.from(mediatorPubKey, 'hex')
+  ].map(p => bitcoin.ECPair.fromPublicKey(p).publicKey);
+  
+  const p2sh = bitcoin.payments.p2sh({
+    redeem: bitcoin.payments.p2ms({ m: 2, pubkeys, network: bitcoin.networks.testnet })
+  });
+  
+  return {
+    address: p2sh.address!,
+    redeemScript: p2sh.redeem!.output.toString('hex')
+  };
+}</code></pre>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">escrowService.ts</h3>
+      <p class="mb-4">
+        Este serviço gerencia o ciclo de vida completo dos escrows:
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>Criação de escrows</li>
+        <li>Verificação de financiamento</li>
+        <li>Confirmação de entrega</li>
+        <li>Liberação de fundos</li>
+        <li>Reembolso</li>
+        <li>Abertura e resolução de disputas</li>
+      </ul>
+
+      <pre><code>// Exemplo de criação de escrow
+async createEscrow(
+  buyerAddress: string,
+  sellerAddress: string,
+  amount: string,
+  description: string,
+  timelock: string
+): Promise<EscrowData> {
+  // Gerar ID único para o escrow
+  const escrowId = 'ESC' + uuidv4().substring(0, 8).toUpperCase();
+  
+  // Criar endereço multisig 2-de-3
+  const multisigAddress = bitcoinService.createMultisigAddress(
+    buyerAddress,
+    sellerAddress,
+    this.mediatorPubKey
+  );
+  
+  // Criar objeto de escrow
+  const escrow: EscrowData = {
+    escrowId,
+    escrowAddress: multisigAddress.address,
+    redeemScript: multisigAddress.redeemScript,
+    buyerAddress,
+    sellerAddress,
+    mediatorAddress: this.mediatorPubKey,
+    amount,
+    description,
+    timelock,
+    status: 'created',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    deliveryConfirmed: false
+  };
+  
+  // Armazenar escrow
+  this.escrows.set(escrowId, escrow);
+  this.saveToStorage();
+  
+  return escrow;
+}</code></pre>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">bitcoinPaymentService.ts</h3>
+      <p class="mb-4">
+        Este serviço integra com BTCPay Server para processamento de pagamentos:
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>Criação de faturas de pagamento</li>
+        <li>Verificação de status de pagamentos</li>
+        <li>Suporte para Lightning Network</li>
+      </ul>
+
+      <pre><code>// Exemplo de criação de fatura de pagamento
+async createInvoice(amount: string, description: string, orderId?: string): Promise<PaymentInvoice> {
+  // Gerar ID único para a fatura
+  const invoiceId = 'INV' + Math.random().toString(36).substring(2, 10).toUpperCase();
+  
+  // Calcular data de expiração (30 minutos a partir de agora)
+  const createdAt = new Date();
+  const expiresAt = new Date(createdAt.getTime() + 30 * 60 * 1000);
+  
+  // Gerar URL de pagamento
+  const paymentUrl = `${this.config.serverUrl}/i/${invoiceId}`;
+  
+  // Gerar QR code para o pagamento
+  const qrCodeUrl = await this.generateQRCode(`bitcoin:?amount=${amount}&label=${encodeURIComponent(description)}`);
+  
+  // Criar objeto de fatura
+  const invoice: PaymentInvoice = {
+    invoiceId,
+    amount,
+    paymentUrl,
+    qrCodeUrl,
+    status: 'new',
+    createdAt: createdAt.toISOString(),
+    expiresAt: expiresAt.toISOString()
+  };
+  
+  return invoice;
+}</code></pre>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Fluxos de Operação</h2>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Criação de Escrow</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>O comprador acessa a página de criação de escrow</li>
+        <li>Fornece o endereço Bitcoin do vendedor, valor e descrição</li>
+        <li>O sistema gera um endereço multisig 2-de-3</li>
+        <li>O comprador envia Bitcoin para o endereço multisig</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Confirmação de Entrega</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>O comprador recebe o produto/serviço</li>
+        <li>Acessa a página de visualização do escrow</li>
+        <li>Confirma a entrega, mudando o status para "em andamento"</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Liberação de Fundos</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>O comprador fornece sua chave privada</li>
+        <li>O sistema cria uma transação para liberar os fundos para o vendedor</li>
+        <li>A transação é transmitida para a rede Bitcoin</li>
+        <li>O status do escrow é atualizado para "concluído"</li>
+      </ol>
+
+      <h3 class="text-xl font-bold mt-6 mb-4">Resolução de Disputas</h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>Comprador ou vendedor abre uma disputa</li>
+        <li>O mediador analisa o caso</li>
+        <li>O mediador decide para onde os fundos devem ir</li>
+        <li>O sistema cria uma transação para liberar os fundos conforme decisão</li>
+        <li>A transação é transmitida para a rede Bitcoin</li>
+      </ol>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Considerações de Segurança</h2>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li><strong>Armazenamento de Chaves</strong>: As chaves privadas são armazenadas apenas no navegador do cliente, nunca no servidor</li>
+        <li><strong>Multisig 2-de-3</strong>: Requer duas assinaturas para movimentar fundos, aumentando a segurança</li>
+        <li><strong>Timelock</strong>: Implementação de timelock para permitir reembolso após um período específico</li>
+        <li><strong>Verificação de Transações</strong>: Verificação de confirmações na rede Bitcoin antes de considerar transações como concluídas</li>
+      </ol>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Limitações e Melhorias Futuras</h2>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li><strong>Integração com Rede Principal</strong>: Atualmente implementado para a rede de teste, futuramente será migrado para a rede principal</li>
+        <li><strong>Melhorias na Interface</strong>: Adicionar mais feedback visual e notificações em tempo real</li>
+        <li><strong>Suporte a Múltiplas Carteiras</strong>: Integrar com carteiras populares como Ledger, Trezor, etc.</li>
+        <li><strong>Escalabilidade</strong>: Implementar soluções de segunda camada para reduzir taxas e aumentar velocidade</li>
+        <li><strong>Auditoria de Segurança</strong>: Realizar auditoria de segurança completa antes do lançamento em produção</li>
+      </ol>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Tecnologias Utilizadas</h2>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li><strong>Frontend</strong>: React, TypeScript, Tailwind CSS</li>
+        <li><strong>Bitcoin</strong>: bitcoinjs-lib</li>
+        <li><strong>Pagamentos</strong>: BTCPay Server</li>
+        <li><strong>Ferramentas</strong>: Vite, QR Code</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold mt-8 mb-6">Conclusão</h2>
+      <p class="mb-4">
+        O sistema de escrow multisig com Bitcoin do PayByt oferece uma solução segura e descentralizada para transações entre compradores e vendedores. A implementação atual demonstra a viabilidade do conceito e estabelece uma base sólida para desenvolvimento futuro.
+      </p>
+    </div>
+  </main>
+  
+  <footer class="bg-gray-800 text-white py-6">
+    <div class="container mx-auto px-4 text-center">
+      <p>&copy; 2025 PayByt. Todos os direitos reservados.</p>
+      <p class="mt-2">
+        <a href="../index.html" class="text-gray-400 hover:text-white">Voltar para a página inicial</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
