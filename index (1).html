@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayByt - Sistema de Autenticação Anônima</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .bg-primary { background-color: #002D72; }
+    .bg-primary-dark { background-color: #001d4c; }
+    .text-primary { color: #002D72; }
+    .border-primary { border-color: #002D72; }
+    .bg-bitcoin { background-color: #F7931A; }
+    .text-bitcoin { color: #F7931A; }
+    .border-bitcoin { border-color: #F7931A; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="bg-primary text-white shadow-md">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <h1 class="text-2xl font-bold">PayByt</h1>
+        <span class="ml-2 bg-bitcoin text-white px-2 py-1 rounded text-xs">DEMO</span>
+      </div>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="#" class="hover:text-gray-300" onclick="showPage('home')">Início</a></li>
+          <li><a href="#" class="hover:text-gray-300" onclick="showPage('auth')">Autenticação</a></li>
+          <li><a href="#" class="hover:text-gray-300" onclick="showPage('escrow')">Escrow</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto px-4 py-8">
+    <!-- Home Page -->
+    <div id="home-page" class="page">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-primary mb-6">Sistema de Autenticação Anônima do PayByt</h2>
+        
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+          <h3 class="text-xl font-semibold text-primary mb-4">Bem-vindo ao PayByt</h3>
+          <p class="mb-4">O PayByt é um marketplace descentralizado que utiliza exclusivamente Bitcoin como forma de pagamento. Nossa plataforma foi projetada para garantir privacidade e segurança em todas as transações.</p>
+          
+          <div class="flex flex-col md:flex-row gap-6 mt-8">
+            <div class="bg-gray-50 p-4 rounded-lg flex-1">
+              <h4 class="text-lg font-semibold text-primary mb-2">Autenticação Anônima</h4>
+              <p class="mb-3">Crie identidades digitais sem revelar informações pessoais. Utilize criptografia avançada para proteger sua privacidade.</p>
+              <button onclick="showPage('auth')" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded">Experimentar</button>
+            </div>
+            
+            <div class="bg-gray-50 p-4 rounded-lg flex-1">
+              <h4 class="text-lg font-semibold text-primary mb-2">Escrow Multisig</h4>
+              <p class="mb-3">Realize transações seguras com nosso sistema de escrow multisig integrado com autenticação anônima.</p>
+              <button onclick="showPage('escrow')" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded">Experimentar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white shadow-md rounded-lg p-6">
+          <h3 class="text-xl font-semibold text-primary mb-4">Tecnologias Utilizadas</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="border border-gray-200 rounded p-3">
+              <h4 class="font-semibold">Zero-Knowledge Proofs</h4>
+              <p class="text-sm text-gray-600">Prove propriedade sem revelar dados sensíveis</p>
+            </div>
+            <div class="border border-gray-200 rounded p-3">
+              <h4 class="font-semibold">Criptografia EdDSA</h4>
+              <p class="text-sm text-gray-600">Assinaturas digitais de alta segurança</p>
+            </div>
+            <div class="border border-gray-200 rounded p-3">
+              <h4 class="font-semibold">Stealth Addresses</h4>
+              <p class="text-sm text-gray-600">Endereços únicos para cada transação</p>
+            </div>
+            <div class="border border-gray-200 rounded p-3">
+              <h4 class="font-semibold">Multisig 2-de-3</h4>
+              <p class="text-sm text-gray-600">Segurança aprimorada para escrows</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth Page -->
+    <div id="auth-page" class="page hidden">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-primary mb-6">Autenticação Anônima</h2>
+        
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+          <div id="auth-not-logged-in">
+            <h3 class="text-xl font-semibold text-primary mb-4">Crie sua Identidade Anônima</h3>
+            <p class="mb-6">Gere uma identidade anônima para acessar o marketplace PayByt sem revelar suas informações pessoais.</p>
+            
+            <div id="invite-section" class="mb-6">
+              <p class="mb-4">Este sistema está em fase de implantação gradual. Por favor, insira seu código de convite para continuar.</p>
+              <div class="flex space-x-2">
+                <input type="text" id="invite-code" placeholder="Código de convite" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-grow">
+                <button onclick="verifyInvite()" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Verificar</button>
+              </div>
+              <p id="invite-error" class="text-red-500 mt-2 hidden"></p>
+            </div>
+            
+            <div id="identity-creation" class="hidden">
+              <button onclick="generateIdentity()" class="bg-bitcoin hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline">Gerar Identidade Anônima</button>
+            </div>
+          </div>
+          
+          <div id="auth-logged-in" class="hidden">
+            <h3 class="text-xl font-semibold text-primary mb-4">Sua Identidade Anônima</h3>
+            <p class="mb-4 text-green-600">Sua identidade anônima foi gerada com sucesso!</p>
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+              <p class="mb-2"><span class="font-semibold">ID da Identidade:</span> <span id="identity-id" class="font-mono text-sm"></span></p>
+              <p class="mb-2"><span class="font-semibold">Chave Pública:</span> <span id="public-key" class="font-mono text-sm"></span></p>
+              <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p class="text-yellow-800 text-sm font-semibold">Importante: Sua chave privada está armazenada apenas no seu navegador.</p>
+                <p class="text-yellow-700 text-sm mt-1">Faça backup da sua chave privada em um local seguro para evitar perda de acesso.</p>
+              </div>
+            </div>
+            
+            <button onclick="logout()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Sair</button>
+          </div>
+        </div>
+        
+        <div class="bg-white shadow-md rounded-lg p-6">
+          <h3 class="text-xl font-semibold text-primary mb-4">Como Funciona</h3>
+          <ol class="list-decimal pl-5 space-y-3">
+            <li>O sistema gera um par de chaves criptográficas (pública e privada)</li>
+            <li>A chave privada é armazenada apenas no seu navegador, nunca no servidor</li>
+            <li>A chave pública é usada para verificar sua identidade sem revelar quem você é</li>
+            <li>Você pode usar sua identidade anônima para acessar o marketplace e realizar transações</li>
+            <li>Todas as operações são verificadas criptograficamente sem revelar sua identidade real</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Escrow Page -->
+    <div id="escrow-page" class="page hidden">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-primary mb-6">Escrow Multisig com Autenticação Anônima</h2>
+        
+        <div id="escrow-not-logged-in" class="bg-white shadow-md rounded-lg p-6 mb-8">
+          <h3 class="text-xl font-semibold text-primary mb-4">Autenticação Necessária</h3>
+          <p class="mb-6">Você precisa estar autenticado com uma identidade anônima para acessar o sistema de escrow.</p>
+          <button onclick="showPage('auth')" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Ir para Autenticação</button>
+        </div>
+        
+        <div id="escrow-logged-in" class="hidden">
+          <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-semibold text-primary">Seus Escrows Anônimos</h3>
+              <button onclick="showEscrowForm()" class="bg-bitcoin hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Criar Novo Escrow</button>
+            </div>
+            
+            <div id="escrow-list" class="space-y-4">
+              <!-- Escrow items will be added here -->
+              <div class="text-gray-500 text-center py-8">Nenhum escrow encontrado. Crie um novo escrow para começar.</div>
+            </div>
+          </div>
+          
+          <div id="escrow-form" class="bg-white shadow-md rounded-lg p-6 mb-8 hidden">
+            <h3 class="text-xl font-semibold text-primary mb-4">Criar Novo Escrow Anônimo</h3>
+            <form id="new-escrow-form" class="space-y-4">
+              <div>
+                <label for="escrow-title" class="block text-gray-700 font-medium mb-1">Título</label>
+                <input type="text" id="escrow-title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              </div>
+              <div>
+                <label for="escrow-description" class="block text-gray-700 font-medium mb-1">Descrição</label>
+                <textarea id="escrow-description" rows="3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+              </div>
+              <div>
+                <label for="escrow-amount" class="block text-gray-700 font-medium mb-1">Valor (BTC)</label>
+                <input type="number" id="escrow-amount" step="0.00000001" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              </div>
+              <div>
+                <label for="escrow-recipient" class="block text-gray-700 font-medium mb-1">Endereço do Destinatário</label>
+                <input type="text" id="escrow-recipient" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              </div>
+              <div class="flex justify-end space-x-3">
+                <button type="button" onclick="hideEscrowForm()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancelar</button>
+                <button type="button" onclick="createEscrow()" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Criar Escrow</button>
+              </div>
+            </form>
+          </div>
+          
+          <div id="escrow-detail" class="bg-white shadow-md rounded-lg p-6 mb-8 hidden">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-semibold text-primary">Detalhes do Escrow</h3>
+              <button onclick="hideEscrowDetail()" class="text-gray-500 hover:text-gray-700">Voltar</button>
+            </div>
+            
+            <div id="escrow-detail-content">
+              <!-- Escrow details will be added here -->
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white shadow-md rounded-lg p-6">
+          <h3 class="text-xl font-semibold text-primary mb-4">Como Funciona o Escrow Multisig</h3>
+          <ol class="list-decimal pl-5 space-y-3">
+            <li>O sistema cria um endereço multisig 2-de-3 (comprador, vendedor e mediador)</li>
+            <li>O comprador envia Bitcoin para o endereço multisig</li>
+            <li>Após receber o produto/serviço, o comprador confirma a entrega</li>
+            <li>Os fundos são liberados para o vendedor usando 2 de 3 assinaturas</li>
+            <li>Em caso de problemas, qualquer parte pode abrir uma disputa</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-8">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between">
+        <div class="mb-6 md:mb-0">
+          <h3 class="text-xl font-bold mb-2">PayByt</h3>
+          <p class="text-gray-400">Marketplace descentralizado com Bitcoin</p>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2">Links Úteis</h4>
+          <ul class="text-gray-400">
+            <li><a href="#" class="hover:text-white">Documentação</a></li>
+            <li><a href="#" class="hover:text-white">GitHub</a></li>
+            <li><a href="#" class="hover:text-white">Suporte</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-8 pt-6 border-t border-gray-700 text-gray-400 text-sm">
+        <p>&copy; 2025 PayByt. Todos os direitos reservados.</p>
+        <p>Versão de demonstração do Sistema de Autenticação Anônima.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Mock data for demonstration
+    const mockEscrows = [
+      {
+        id: 'escrow_1',
+        title: 'Compra de Laptop',
+        description: 'Escrow para compra de laptop gaming',
+        amount: 0.05,
+        recipientAddress: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+        status: 'funded',
+        createdAt: '2025-04-20T14:30:00Z'
+      },
+      {
+        id: 'escrow_2',
+        title: 'Serviço de Design',
+        description: 'Escrow para serviço de design de logo',
+        amount: 0.01,
+        recipientAddress: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+        status: 'delivered',
+        createdAt: '2025-04-18T10:15:00Z'
+      },
+      {
+        id: 'escrow_3',
+        title: 'Consultoria',
+        description: 'Escrow para serviço de consultoria',
+        amount: 0.02,
+        recipientAddress: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+        status: 'completed',
+        createdAt: '2025-04-15T09:45:00Z'
+      }
+    ];
+
+    // Current page
+    let currentPage = 'home';
+
+    // Show page function
+    function showPage(page) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+      
+      // Show selected page
+      document.getElementById(page + '-page').classList.remove('hidden');
+      
+      // Update current page
+      currentPage = page;
+      
+      // Special handling for escrow page
+      if (page === 'escrow') {
+        updateEscrowPage();
+      }
+    }
+
+    // Authentication functions
+    function verifyInvite() {
+      const inviteCode = document.getElementById('invite-code').value;
+      const errorElement = document.getElementById('invite-error');
+      
+      if (!inviteCode) {
+        errorElement.textContent = 'Por favor, insira um código de convite.';
+        errorElement.classList.remove('hidden');
+        return;
+      }
+      
+      // For demo purposes, accept any code
+      document.getElementById('invite-section').classList.add('hidden');
+      document.getElementById('identity-creation').classList.remove('hidden');
+      errorElement.classList.add('hidden');
+    }
+
+    function generateIdentity() {
+      // For demo purposes, generate a mock identity
+      const identity = {
+        identityId: 'id_' + Math.random().toString(36).substr(2, 9),
+        publicKey: 'pk_' + Math.random().toString(36).substr(2, 24),
+        privateKey: 'sk_' + Math.random().toString(36).substr(2, 32)
+      };
+      
+      // Save to localStorage
+      localStorage.setItem('anonymousIdentity', JSON.stringify(identity));
+      
+      // Update UI
+      document.getElementById('auth-not-logged-in').classList.add('hidden');
+      document.getElementById('auth-logged-in').classList.remove('hidden');
+      document.getElementById('identity-id').textContent = identity.identityId;
+      document.getElementById('public-key').textContent = identity.publicKey;
+      
+      // Update escrow page if it's the current page
+      if (currentPage === 'escrow') {
+        updateEscrowPage();
+      }
+    }
+
+    function logout() {
+      // Remove from localStorage
+      localStorage.removeItem('anonymousIdentity');
+      
+      // Update UI
+      document.getElementById('auth-not-logged-in').classList.remove('hidden');
+      document.getElementById('auth-logged-in').classList.add('hidden');
+      document.getElementById('invite-section').classList.remove('hidden');
+      document.getElementById('identity-creation').classList.add('hidden');
+      
+      // Update escrow page if it's the current page
+      if (currentPage === 'escrow') {
+        updateEscrowPage();
+      }
+    }
+
+    // Escrow functions
+    function updateEscrowPage() {
+      const identity = JSON.parse(localStorage.getItem('anonymousIdentity'));
+      
+      if (identity) {
+        document.getElementById('escrow-not-logged-in').classList.add('hidden');
+        document.getElementById('escrow-logged-in').classList.remove('hidden');
+        updateEscrowList();
+      } else {
+        document.getElementById('escrow-not-logged-in').classList.remove('hidden');
+        document.getElementById('escrow-logged-in').classList.add('hidden');
+      }
+    }
+
+    function updateEscrowList() {
+      const escrowList = document.getElementById('escrow-list');
+      
+      if (mockEscrows.length === 0) {
+        escrowList.innerHTML = '<div class="text-gray-500 text-center py-8">Nenhum escrow encontrado. Crie um novo escrow para começar.</div>';
+        return;
+      }
+      
+      let html = '';
+      mockEscrows.forEach(escrow => {
+        const statusClass = getStatusClass(escrow.status);
+        const statusText = getStatusText(escrow.status);
+        
+        html += `
+          <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-semibold text-lg">${escrow.title}</h4>
+                <p class="text-gray-600 text-sm">${escrow.description}</p>
+              </div>
+              <span class="px-2 py-1 rounded text-xs ${statusClass}">${statusText}</span>
+            </div>
+            <div class="mt-3 flex justify-between items-center">
+              <div>
+                <p class="text-sm"><span class="font-medium">Valor:</span> ${escrow.amount} BTC</p>
+                <p class="text-sm text-gray-500">${formatDate(escrow.createdAt)}</p>
+              </div>
+              <button onclick="viewEscrowDetail('${escrow.id}')" class="text-primary hover:text-primary-dark font-medium">Detalhes</button>
+            </div>
+          </div>
+        `;
+      });
+      
+      escrowList.innerHTML = html;
+    }
+
+    function getStatusClass(status) {
+      switch (status) {
+        case 'funded':
+          return 'bg-blue-100 text-blue-800';
+        case 'delivered':
+          return 'bg-yellow-100 text-yellow-800';
+        case 'completed':
+          return 'bg-green-100 text-green-800';
+        case 'disputed':
+          return 'bg-red-100 text-red-800';
+        default:
+          return 'bg-gray-100 text-gray-800';
+      }
+    }
+
+    function getStatusText(status) {
+      switch (status) {
+        case 'funded':
+          return 'Financiado';
+        case 'delivered':
+          return 'Entregue';
+        case 'completed':
+          return 'Concluído';
+        case 'disputed':
+          return 'Em disputa';
+        default:
+          return status;
+      }
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('pt-BR', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function showEscrowForm() {
+      document.getElementById('escrow-list').parentElement.classList.add('hidden');
+      document.getElementById('escrow-form').classList.remove('hidden');
+      document.getElementById('escrow-detail').classList.add('hidden');
+    }
+
+    function hideEscrowForm() {
+      document.getElementById('escrow-list').parentElement.classList.remove('hidden');
+      document.getElementById('escrow-form').classList.add('hidden');
+    }
+
+    function createEscrow() {
+      const title = document.getElementById('escrow-title').value;
+      const description = document.getElementById('escrow-description').value;
+      const amount = document.getElementById('escrow-amount').value;
+      const recipient = document.getElementById('escrow-recipient').value;
+      
+      if (!title || !description || !amount || !recipient) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+      }
+      
+      // For demo purposes, add to mock data
+      const newEscrow = {
+        id: 'escrow_' + (mockEscrows.length + 1),
+        title,
+        description,
+        amount: parseFloat(amount),
+        recipientAddress: recipient,
+        status: 'funded',
+        createdAt: new Date().toISOString()
+      };
+      
+      mockEscrows.unshift(newEscrow);
+      
+      // Reset form
+      document.getElementById('new-escrow-form').reset();
+      
+      // Hide form and update list
+      hideEscrowForm();
+      updateEscrowList();
+    }
+
+    function viewEscrowDetail(escrowId) {
+      const escrow = mockEscrows.find(e => e.id === escrowId);
+      if (!escrow) return;
+      
+      const statusClass = getStatusClass(escrow.status);
+      const statusText = getStatusText(escrow.status);
+      
+      let actionsHtml = '';
+      if (escrow.status === 'funded') {
+        actionsHtml = `
+          <button onclick="confirmDelivery('${escrow.id}')" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Confirmar Entrega</button>
+        `;
+      } else if (escrow.status === 'delivered') {
+        actionsHtml = `
+          <div class="flex space-x-3">
+            <button onclick="releaseEscrow('${escrow.id}')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Liberar Fundos</button>
+            <button onclick="disputeEscrow('${escrow.id}')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Abrir Disputa</button>
+          </div>
+        `;
+      }
+      
+      const html = `
+        <div class="border-b pb-4 mb-4">
+          <div class="flex justify-between items-center">
+            <h4 class="font-semibold text-lg">${escrow.title}</h4>
+            <span class="px-2 py-1 rounded text-xs ${statusClass}">${statusText}</span>
+          </div>
+          <p class="text-gray-600 mt-2">${escrow.description}</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div>
+            <p class="text-sm text-gray-500">ID do Escrow</p>
+            <p class="font-mono">${escrow.id}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Data de Criação</p>
+            <p>${formatDate(escrow.createdAt)}</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Valor</p>
+            <p class="font-semibold">${escrow.amount} BTC</p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Endereço do Destinatário</p>
+            <p class="font-mono text-sm">${escrow.recipientAddress}</p>
+          </div>
+        </div>
+        
+        <div class="mt-6">
+          ${actionsHtml}
+        </div>
+      `;
+      
+      document.getElementById('escrow-detail-content').innerHTML = html;
+      document.getElementById('escrow-list').parentElement.classList.add('hidden');
+      document.getElementById('escrow-form').classList.add('hidden');
+      document.getElementById('escrow-detail').classList.remove('hidden');
+    }
+
+    function hideEscrowDetail() {
+      document.getElementById('escrow-list').parentElement.classList.remove('hidden');
+      document.getElementById('escrow-detail').classList.add('hidden');
+    }
+
+    function confirmDelivery(escrowId) {
+      const escrow = mockEscrows.find(e => e.id === escrowId);
+      if (!escrow) return;
+      
+      escrow.status = 'delivered';
+      viewEscrowDetail(escrowId);
+      updateEscrowList();
+    }
+
+    function releaseEscrow(escrowId) {
+      const escrow = mockEscrows.find(e => e.id === escrowId);
+      if (!escrow) return;
+      
+      escrow.status = 'completed';
+      viewEscrowDetail(escrowId);
+      updateEscrowList();
+    }
+
+    function disputeEscrow(escrowId) {
+      const escrow = mockEscrows.find(e => e.id === escrowId);
+      if (!escrow) return;
+      
+      escrow.status = 'disputed';
+      viewEscrowDetail(escrowId);
+      updateEscrowList();
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      const identity = JSON.parse(localStorage.getItem('anonymousIdentity'));
+      
+      if (identity) {
+        document.getElementById('auth-not-logged-in').classList.add('hidden');
+        document.getElementById('auth-logged-in').classList.remove('hidden');
+        document.getElementById('identity-id').textContent = identity.identityId;
+        document.getElementById('public-key').textContent = identity.publicKey;
+      }
+      
+      // Show home page by default
+      showPage('home');
+    });
+  </script>
+</body>
+</html>
