@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayByt - Documentação Técnica</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #f8b400;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .content {
+            padding: 40px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        
+        .doc-content {
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 250px;
+            padding-right: 20px;
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .sidebar ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .sidebar ul li ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding-left: 20px;
+            border-left: 1px solid #ddd;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        h3 {
+            color: var(--dark-color);
+            margin: 25px 0 15px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        table th {
+            background-color: #f5f5f5;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+            }
+            
+            .doc-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                padding-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .main-content {
+                padding-left: 0;
+                border-left: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="logo.png" alt="PayByt Logo">
+                <h1>PayByt</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="documentacao_tecnica.html">Documentação Técnica</a></li>
+                    <li><a href="manual_usuario.html">Manual do Usuário</a></li>
+                    <li><a href="guia_instalacao.html">Guia de Instalação</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container content">
+        <div class="doc-content">
+            <div class="sidebar">
+                <ul>
+                    <li><a href="#visao-geral">Visão Geral</a></li>
+                    <li><a href="#arquitetura">Arquitetura</a></li>
+                    <li><a href="#componentes">Componentes Principais</a>
+                        <ul>
+                            <li><a href="#integracao-lightning">Integração Lightning Network</a></li>
+                            <li><a href="#sistema-oraculos">Sistema de Oráculos</a></li>
+                            <li><a href="#sistema-taxas">Sistema de Taxas</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#fluxos">Fluxos de Pagamento</a></li>
+                    <li><a href="#apis">APIs</a></li>
+                    <li><a href="#tecnologias">Tecnologias Utilizadas</a></li>
+                    <li><a href="#configuracao">Configuração e Instalação</a></li>
+                    <li><a href="#testes">Testes</a></li>
+                    <li><a href="#seguranca">Considerações de Segurança</a></li>
+                    <li><a href="#limitacoes">Limitações e Trabalhos Futuros</a></li>
+                    <li><a href="#referencias">Referências</a></li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <h1 style="color: var(--primary-color); margin-bottom: 20px;">Documentação Técnica - Integração Lightning Network PayByt</h1>
+                
+                <section id="visao-geral">
+                    <h2>Visão Geral</h2>
+                    <p>Esta documentação descreve a implementação da integração Lightning Network para o marketplace PayByt, incluindo o sistema de oráculos para verificação de entrega e o sistema de taxas da plataforma. A solução foi projetada para fornecer pagamentos rápidos e de baixo custo usando a Lightning Network do Bitcoin, além de garantir a segurança das transações através de verificação automática de entregas.</p>
+                </section>
+                
+                <section id="arquitetura">
+                    <h2>Arquitetura</h2>
+                    <p>A arquitetura da solução segue um design modular, com três componentes principais:</p>
+                    <ol>
+                        <li><strong>Integração Lightning Network</strong>: Gerencia pagamentos via Lightning Network</li>
+                        <li><strong>Sistema de Oráculos</strong>: Verifica automaticamente a entrega de produtos</li>
+                        <li><strong>Sistema de Taxas</strong>: Gerencia a taxa de 1% da plataforma</li>
+                    </ol>
+                    
+                    <h3>Diagrama de Componentes</h3>
+                    <pre>
++---------------------+     +---------------------+     +---------------------+
+|                     |     |                     |     |                     |
+| Integração Lightning|<--->| Sistema de Oráculos |<--->| Sistema de Taxas    |
+|                     |     |                     |     |                     |
++---------------------+     +---------------------+     +---------------------+
+         ^                           ^                           ^
+         |                           |                           |
+         v                           v                           v
++---------------------+     +---------------------+     +---------------------+
+|                     |     |                     |     |                     |
+| BTCPay Server/      |     | Chainlink/IPFS      |     | Distribuição de     |
+| OpenNode            |     | Smart Contracts     |     | Taxas               |
+|                     |     |                     |     |                     |
++---------------------+     +---------------------+     +---------------------+
+                    </pre>
+                </section>
+                
+                <section id="componentes">
+                    <h2>Componentes Principais</h2>
+                    
+                    <section id="integracao-lightning">
+                        <h3>1. Integração Lightning Network</h3>
+                        
+                        <h4>Serviços</h4>
+                        <ul>
+                            <li><strong>lightningService.ts</strong>: Implementa a integração com Lightning Network
+                                <ul>
+                                    <li>Criação de faturas via BTCPay Server e OpenNode</li>
+                                    <li>Verificação de status de pagamentos</li>
+                                    <li>Processamento de webhooks</li>
+                                    <li>Geração de QR codes para pagamentos</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        
+                        <h4>Controladores e Rotas</h4>
+                        <ul>
+                            <li><strong>lightningController.ts</strong>: Gerencia as operações relacionadas a pagamentos</li>
+                            <li><strong>lightningRoutes.ts</strong>: Define os endpoints da API para pagamentos</li>
+                        </ul>
+                        
+                        <h4>Componentes de Interface</h4>
+                        <ul>
+                            <li><strong>LightningPaymentComponent.tsx</strong>: Interface para pagamentos Lightning</li>
+                            <li><strong>LightningCheckoutPage.tsx</strong>: Fluxo completo de checkout com Lightning</li>
+                        </ul>
+                    </section>
+                    
+                    <section id="sistema-oraculos">
+                        <h3>2. Sistema de Oráculos</h3>
+                        
+                        <h4>Serviços</h4>
+                        <ul>
+                            <li><strong>oracleService.ts</strong>: Gerencia a verificação de entregas
+                                <ul>
+                                    <li>Monitoramento de códigos de rastreio</li>
+                                    <li>Verificação de entrega de produtos digitais</li>
+                                    <li>Registro de provas de abertura/leitura</li>
+                                </ul>
+                            </li>
+                            <li><strong>chainlinkDeliveryAdapter.ts</strong>: Integração com Chainlink para verificação de entregas</li>
+                            <li><strong>ipfsProofAdapter.ts</strong>: Armazenamento de provas no IPFS</li>
+                            <li><strong>smartContractAdapter.ts</strong>: Integração com contratos inteligentes</li>
+                        </ul>
+                        
+                        <h4>Controladores e Rotas</h4>
+                        <ul>
+                            <li><strong>oracleController.ts</strong>: Gerencia as operações relacionadas a verificação de entregas</li>
+                            <li><strong>oracleRoutes.ts</strong>: Define os endpoints da API para verificação de entregas</li>
+                        </ul>
+                        
+                        <h4>Componentes de Interface</h4>
+                        <ul>
+                            <li><strong>DeliveryVerificationComponent.tsx</strong>: Interface para verificação de entregas</li>
+                        </ul>
+                    </section>
+                    
+                    <section id="sistema-taxas">
+                        <h3>3. Sistema de Taxas</h3>
+                        
+                        <h4>Serviços</h4>
+                        <ul>
+                            <li><strong>feeService.ts</strong>: Gerencia o cálculo e registro de taxas
+                                <ul>
+                                    <li>Cálculo da taxa de 1% da plataforma</li>
+                                    <li>Estimativa de taxas de mineração e roteamento</li>
+                                    <li>Registro de taxas coletadas</li>
+                                </ul>
+                            </li>
+                            <li><strong>feeDistributionService.ts</strong>: Gerencia a distribuição de taxas
+                                <ul>
+                                    <li>Distribuição entre diferentes destinos</li>
+                                    <li>Geração de relatórios de taxas</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        
+                        <h4>Controladores e Rotas</h4>
+                        <ul>
+                            <li><strong>feeController.ts</strong>: Gerencia as operações relacionadas a taxas</li>
+                            <li><strong>feeRoutes.ts</strong>: Define os endpoints da API para taxas</li>
+                            <li><strong>feeDistributionController.ts</strong>: Gerencia a distribuição de taxas</li>
+                            <li><strong>feeDistributionRoutes.ts</strong>: Define os endpoints da API para distribuição de taxas</li>
+                        </ul>
+                        
+                        <h4>Componentes de Interface</h4>
+                        <ul>
+                            <li><strong>FeeSummaryComponent.tsx</strong>: Exibição de resumo de taxas</li>
+                        </ul>
+                    </section>
+                </section>
+                
+                <section id="fluxos">
+                    <h2>Fluxos de Pagamento</h2>
+                    
+                    <h3>Pagamento via Lightning Network</h3>
+                    <ol>
+                        <li>Usuário seleciona produto e escolhe Lightning Network como método de pagamento</li>
+                        <li>Sistema calcula valor total incluindo taxa da plataforma (1%)</li>
+                        <li><code>lightningService</code> cria fatura Lightning via BTCPay Server ou OpenNode</li>
+                        <li>Usuário paga usando carteira Lightning Network</li>
+                        <li>Gateway notifica sistema via webhook quando pagamento é recebido</li>
+                        <li>Sistema atualiza status da transação e registra taxa da plataforma</li>
+                    </ol>
+                    
+                    <h3>Verificação de Entrega para Produtos Físicos</h3>
+                    <ol>
+                        <li>Vendedor registra código de rastreio no sistema</li>
+                        <li><code>oracleService</code> monitora status de entrega periodicamente via <code>chainlinkDeliveryAdapter</code></li>
+                        <li>Quando entrega é confirmada, <code>smartContractAdapter</code> envia sinal para smart contract</li>
+                        <li>Smart contract libera fundos automaticamente para o vendedor</li>
+                    </ol>
+                    
+                    <h3>Verificação de Entrega para Produtos Digitais</h3>
+                    <ol>
+                        <li>Vendedor envia chave de ativação ou link de download via plataforma</li>
+                        <li>Comprador confirma recebimento ou sistema verifica automaticamente após X dias</li>
+                        <li><code>ipfsProofAdapter</code> registra provas de abertura via IPFS ou assinaturas digitais</li>
+                        <li>Smart contract libera fundos para o vendedor</li>
+                    </ol>
+                    
+                    <h3>Distribuição de Taxas</h3>
+                    <ol>
+                        <li>Sistema coleta taxa de 1% sobre o valor da transação</li>
+                        <li><code>feeDistributionService</code> distribui a taxa entre diferentes destinos:
+                            <ul>
+                                <li>40% para operações da plataforma</li>
+                                <li>30% para desenvolvimento</li>
+                                <li>20% para segurança</li>
+                                <li>10% para comunidade</li>
+                            </ul>
+                        </li>
+                        <li>Sistema gera relatórios de taxas coletadas e distribuídas</li>
+                    </ol>
+                </section>
+                
+                <section id="apis">
+                    <h2>APIs</h2>
+                    
+                    <h3>API Lightning Network</h3>
+                    <table>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Método</th>
+                            <th>Descrição</th>
+                        </tr>
+                        <tr>
+                            <td><code>/api/lightning/invoice</code></td>
+                            <td>POST</td>
+                            <td>Criar nova fatura Lightning</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/lightning/invoice/:invoiceId</code></td>
+                            <td>GET</td>
+                            <td>Obter fatura pelo ID</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/lightning/invoice/:invoiceId/status</code></td>
+                            <td>GET</td>
+                            <td>Verificar status de fatura</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/lightning/invoices</code></td>
+                            <td>GET</td>
+                            <td>Obter todas as faturas</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/lightning/webhook/btcpay</code></td>
+                            <td>POST</td>
+                            <td>Webhook para BTCPay Server</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/lightning/webhook/opennode</code></td>
+                            <td>POST</td>
+                            <td>Webhook para OpenNode</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/lightning/fee-estimate</code></td>
+                            <td>GET</td>
+                            <td>Estimar taxas para transação</td>
+                        </tr>
+                    </table>
+                    
+                    <h3>API de Oráculos</h3>
+                    <table>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Método</th>
+                            <th>Descrição</th>
+                        </tr>
+                        <tr>
+                            <td><code>/api/oracle/tracking</code></td>
+                            <td>POST</td>
+                            <td>Registrar código de rastreio</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/oracle/tracking/:trackingCode</code></td>
+                            <td>GET</td>
+                            <td>Obter status de entrega</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/oracle/tracking/:trackingCode/status</code></td>
+                            <td>GET</td>
+                            <td>Verificar status atual</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/oracle/tracking/:trackingCode/qrcode</code></td>
+                            <td>GET</td>
+                            <td>Gerar QR code para confirmação</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/oracle/tracking/confirm</code></td>
+                            <td>POST</td>
+                            <td>Confirmar entrega via QR code</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/oracle/digital</code></td>
+                            <td>POST</td>
+                            <td>Registrar entrega digital</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/oracle/digital/:productId</code></td>
+                            <td>GET</td>
+                            <td>Obter status de entrega digital</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/oracle/digital/:productId/confirm</code></td>
+                            <td>POST</td>
+                            <td>Confirmar recebimento digital</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/oracle/digital/proof</code></td>
+                            <td>POST</td>
+                            <td>Registrar prova de abertura</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/oracle/digital/verify</code></td>
+                            <td>POST</td>
+                            <td>Verificar prova de leitura</td>
+                        </tr>
+                    </table>
+                    
+                    <h3>API de Taxas</h3>
+                    <table>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Método</th>
+                            <th>Descrição</th>
+                        </tr>
+                        <tr>
+                            <td><code>/api/fee/platform</code></td>
+                            <td>GET</td>
+                            <td>Calcular taxa da plataforma</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/fee/mining</code></td>
+                            <td>GET</td>
+                            <td>Estimar taxa de mineração</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/fee/routing</code></td>
+                            <td>GET</td>
+                            <td>Estimar taxa de roteamento</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/fee/record</code></td>
+                            <td>POST</td>
+                            <td>Registrar cobrança de taxa</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/fee/report</code></td>
+                            <td>GET</td>
+                            <td>Gerar relatório de taxas</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/fee/records</code></td>
+                            <td>GET</td>
+                            <td>Obter todos os registros de taxas</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/fee/records/:feeType</code></td>
+                            <td>GET</td>
+                            <td>Obter registros por tipo</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/fee/config</code></td>
+                            <td>GET</td>
+                            <td>Obter configuração de taxas</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/fee/config</code></td>
+                            <td>PUT</td>
+                            <td>Atualizar configuração de taxas</td>
+                        </tr>
+                    </table>
+                </section>
+                
+                <section id="tecnologias">
+                    <h2>Tecnologias Utilizadas</h2>
+                    
+                    <table>
+                        <tr>
+                            <th>Componente</th>
+                            <th>Tecnologia</th>
+                        </tr>
+                        <tr>
+                            <td>Frontend</td>
+                            <td>React.js, TypeScript, Tailwind CSS</td>
+                        </tr>
+                        <tr>
+                            <td>Backend</td>
+                            <td>Node.js, Express.js</td>
+                        </tr>
+                        <tr>
+                            <td>Pagamentos Lightning</td>
+                            <td>BTCPay Server, OpenNode</td>
+                        </tr>
+                        <tr>
+                            <td>Oráculos</td>
+                            <td>Chainlink External Adapter</td>
+                        </tr>
+                        <tr>
+                            <td>Armazenamento de Provas</td>
+                            <td>IPFS</td>
+                        </tr>
+                        <tr>
+                            <td>Contratos Inteligentes</td>
+                            <td>Solidity (Ethereum/BSC/RSK)</td>
+                        </tr>
+                        <tr>
+                            <td>Banco de Dados</td>
+                            <td>MongoDB (para histórico)</td>
+                        </tr>
+                    </table>
+                </section>
+                
+                <section id="configuracao">
+                    <h2>Configuração e Instalação</h2>
+                    
+                    <h3>Pré-requisitos</h3>
+                    <ul>
+                        <li>Node.js 14+</li>
+                        <li>npm ou yarn</li>
+                        <li>Conta no BTCPay Server ou OpenNode</li>
+                        <li>Nó Lightning Network (opcional)</li>
+                    </ul>
+                    
+                    <h3>Instalação</h3>
+                    <p>Para instruções detalhadas de instalação, consulte o <a href="guia_instalacao.html">Guia de Instalação</a>.</p>
+                </section>
+                
+                <section id="testes">
+                    <h2>Testes</h2>
+                    
+                    <p>Os testes unitários foram implementados usando Jest. Para executar os testes:</p>
+                    
+                    <pre>npm test</pre>
+                    
+                    <p>Os testes cobrem:</p>
+                    <ul>
+                        <li>Integração Lightning Network</li>
+                        <li>Sistema de Oráculos</li>
+                        <li>Sistema de Taxas</li>
+                    </ul>
+                </section>
+                
+                <section id="seguranca">
+                    <h2>Considerações de Segurança</h2>
+                    
+                    <ul>
+                        <li>As chaves privadas são armazenadas apenas no navegador do cliente, nunca no servidor</li>
+                        <li>Todas as comunicações com APIs externas são feitas via HTTPS</li>
+                        <li>Webhooks são verificados usando assinaturas digitais</li>
+                        <li>Provas de entrega são armazenadas de forma imutável no IPFS</li>
+                        <li>Contratos inteligentes são auditados antes da implantação</li>
+                    </ul>
+                </section>
+                
+                <section id="limitacoes">
+                    <h2>Limitações e Trabalhos Futuros</h2>
+                    
+                    <ul>
+                        <li>Implementação atual usa simulações para algumas integrações externas</li>
+                        <li>Suporte a múltiplos gateways Lightning pode ser expandido</li>
+                        <li>Sistema de oráculos pode ser aprimorado com mais fontes de dados</li>
+                        <li>Integração com mais transportadoras para rastreamento de entregas</li>
+                        <li>Implementação de sistema de disputas e arbitragem</li>
+                    </ul>
+                </section>
+                
+                <section id="referencias">
+                    <h2>Referências</h2>
+                    
+                    <ul>
+                        <li><a href="https://docs.btcpayserver.org/" target="_blank">Documentação BTCPay Server</a></li>
+                        <li><a href="https://developers.opennode.com/" target="_blank">Documentação OpenNode</a></li>
+                        <li><a href="https://docs.chain.link/" target="_blank">Documentação Chainlink</a></li>
+                        <li><a href="https://docs.ipfs.io/" target="_blank">Documentação IPFS</a></li>
+                        <li><a href="https://github.com/lightning/bolts/blob/master/11-payment-encoding.md" target="_blank">Especificação BOLT11</a></li>
+                    </ul>
+                </section>
+                
+                <div style="margin-top: 40px;">
+                    <a href="index.html" class="btn">Voltar para a Página Inicial</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container footer-content">
+            <p>© 2025 PayByt. Todos os direitos reservados.</p>
+            <p>Marketplace descentralizado com Bitcoin</p>
+        </div>
+    </footer>
+</body>
+</html>

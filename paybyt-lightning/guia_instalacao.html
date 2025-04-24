@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayByt - Guia de Instalação</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #f8b400;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .content {
+            padding: 40px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        
+        .doc-content {
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 250px;
+            padding-right: 20px;
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .sidebar ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .sidebar ul li ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding-left: 20px;
+            border-left: 1px solid #ddd;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        h3 {
+            color: var(--dark-color);
+            margin: 25px 0 15px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .info-box {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning-box {
+            background-color: #fff8e1;
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .tip-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+            }
+            
+            .doc-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                padding-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .main-content {
+                padding-left: 0;
+                border-left: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="logo.png" alt="PayByt Logo">
+                <h1>PayByt</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="documentacao_tecnica.html">Documentação Técnica</a></li>
+                    <li><a href="manual_usuario.html">Manual do Usuário</a></li>
+                    <li><a href="guia_instalacao.html">Guia de Instalação</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container content">
+        <div class="doc-content">
+            <div class="sidebar">
+                <ul>
+                    <li><a href="#introducao">Introdução</a></li>
+                    <li><a href="#pre-requisitos">Pré-requisitos</a></li>
+                    <li><a href="#instalacao">Instalação</a>
+                        <ul>
+                            <li><a href="#clone">1. Clone do Repositório</a></li>
+                            <li><a href="#dependencias">2. Instalação de Dependências</a></li>
+                            <li><a href="#variaveis">3. Configuração de Variáveis</a></li>
+                            <li><a href="#integracao">4. Integração ao Projeto</a></li>
+                            <li><a href="#rotas">5. Configuração de Rotas</a></li>
+                            <li><a href="#componentes">6. Integração de Componentes</a></li>
+                            <li><a href="#btcpay">7. Configuração do BTCPay Server</a></li>
+                            <li><a href="#chainlink">8. Configuração do Chainlink</a></li>
+                            <li><a href="#smart-contract">9. Implantação do Smart Contract</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#execucao">Executando o Projeto</a></li>
+                    <li><a href="#testes">Testando a Instalação</a></li>
+                    <li><a href="#solucao">Solução de Problemas</a></li>
+                    <li><a href="#atualizacoes">Atualizações e Manutenção</a></li>
+                    <li><a href="#suporte">Suporte</a></li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <h1 style="color: var(--primary-color); margin-bottom: 20px;">Guia de Instalação - Integração Lightning Network PayByt</h1>
+                
+                <section id="introducao">
+                    <h2>Introdução</h2>
+                    <p>Este guia fornece instruções detalhadas para instalar e configurar a integração Lightning Network para o marketplace PayByt, incluindo o sistema de oráculos para verificação de entrega e o sistema de taxas da plataforma.</p>
+                </section>
+                
+                <section id="pre-requisitos">
+                    <h2>Pré-requisitos</h2>
+                    <p>Antes de começar, certifique-se de ter instalado:</p>
+                    <ul>
+                        <li>Node.js (versão 14.0.0 ou superior)</li>
+                        <li>npm (versão 6.0.0 ou superior) ou yarn (versão 1.22.0 ou superior)</li>
+                        <li>Git</li>
+                    </ul>
+                    
+                    <p>Você também precisará de:</p>
+                    <ul>
+                        <li>Conta no BTCPay Server ou OpenNode para processamento de pagamentos Lightning</li>
+                        <li>Acesso a um nó Lightning Network (opcional, mas recomendado para ambiente de produção)</li>
+                        <li>Conta no Infura ou outro provedor IPFS (para armazenamento de provas)</li>
+                        <li>Conta no Chainlink (para oráculos)</li>
+                    </ul>
+                    
+                    <div class="info-box">
+                        <p><strong>Nota:</strong> Para ambiente de desenvolvimento, você pode usar simulações para algumas integrações externas.</p>
+                    </div>
+                </section>
+                
+                <section id="instalacao">
+                    <h2>Instalação</h2>
+                    
+                    <section id="clone">
+                        <h3>1. Clone o Repositório</h3>
+                        <pre>git clone https://github.com/Daniellobo989/paybytmvp.git
+cd paybytmvp</pre>
+                    </section>
+                    
+                    <section id="dependencias">
+                        <h3>2. Instale as Dependências</h3>
+                        <p>Usando npm:</p>
+                        <pre>npm install</pre>
+                        
+                        <p>Ou usando yarn:</p>
+                        <pre>yarn install</pre>
+                    </section>
+                    
+                    <section id="variaveis">
+                        <h3>3. Configure as Variáveis de Ambiente</h3>
+                        <p>Crie um arquivo <code>.env</code> na raiz do projeto:</p>
+                        <pre>cp .env.example .env</pre>
+                        
+                        <p>Edite o arquivo <code>.env</code> com suas credenciais:</p>
+                        <pre># Configuração do Servidor
+PORT=3000
+NODE_ENV=development
+
+# BTCPay Server
+BTCPAY_SERVER_URL=https://seu-servidor-btcpay.com
+BTCPAY_API_KEY=sua-api-key
+BTCPAY_STORE_ID=seu-store-id
+
+# OpenNode (opcional)
+OPENNODE_API_URL=https://api.opennode.com
+OPENNODE_API_KEY=sua-api-key
+
+# IPFS
+IPFS_API_URL=https://ipfs.infura.io:5001/api/v0
+IPFS_GATEWAY_URL=https://ipfs.io/ipfs
+IPFS_API_KEY=sua-api-key
+
+# Chainlink
+CHAINLINK_NODE_URL=https://seu-node-chainlink.com
+CHAINLINK_JOB_ID=seu-job-id
+CHAINLINK_ORACLE_ADDRESS=seu-oracle-address
+CHAINLINK_API_KEY=sua-api-key
+
+# Smart Contract
+BLOCKCHAIN_PROVIDER_URL=https://rsk-testnet.alchemyapi.io/v2/sua-api-key
+ESCROW_CONTRACT_ADDRESS=0xSeuContratoEscrow
+CONTRACT_PRIVATE_KEY=sua-chave-privada
+
+# APIs de Rastreamento
+CORREIOS_API_KEY=sua-api-key
+DHL_API_KEY=sua-api-key
+UPS_API_KEY=sua-api-key
+TRACKING_MORE_API_KEY=sua-api-key</pre>
+                    </section>
+                    
+                    <section id="integracao">
+                        <h3>4. Integre os Componentes ao Projeto Existente</h3>
+                        
+                        <h4>Copie os Arquivos de Serviço</h4>
+                        <pre>cp -r paybyt-lightning/src/services/* paybyt-interactive/src/services/</pre>
+                        
+                        <h4>Copie os Controladores e Rotas</h4>
+                        <pre>cp -r paybyt-lightning/src/controllers/* paybyt-interactive/src/controllers/
+cp -r paybyt-lightning/src/routes/* paybyt-interactive/src/routes/</pre>
+                        
+                        <h4>Copie os Componentes de Interface</h4>
+                        <pre>cp -r paybyt-lightning/src/components/lightning/* paybyt-interactive/src/components/lightning/</pre>
+                        
+                        <h4>Copie os Testes</h4>
+                        <pre>cp -r paybyt-lightning/src/tests/* paybyt-interactive/src/tests/</pre>
+                    </section>
+                    
+                    <section id="rotas">
+                        <h3>5. Configure as Rotas no Servidor Express</h3>
+                        <p>Edite o arquivo principal do servidor (geralmente <code>src/index.js</code> ou <code>src/app.js</code>):</p>
+                        <pre>// Importar rotas
+const lightningRoutes = require('./routes/lightningRoutes');
+const oracleRoutes = require('./routes/oracleRoutes');
+const feeRoutes = require('./routes/feeRoutes');
+const feeDistributionRoutes = require('./routes/feeDistributionRoutes');
+
+// Configurar rotas
+app.use('/api/lightning', lightningRoutes);
+app.use('/api/oracle', oracleRoutes);
+app.use('/api/fee', feeRoutes);
+app.use('/api/fee-distribution', feeDistributionRoutes);</pre>
+                    </section>
+                    
+                    <section id="componentes">
+                        <h3>6. Integre os Componentes React</h3>
+                        <p>Edite o arquivo de rotas do React (geralmente <code>src/App.tsx</code>):</p>
+                        <pre>import LightningCheckoutPage from './components/lightning/LightningCheckoutPage';
+
+// Adicione a rota para o checkout Lightning
+&lt;Route path="/checkout/lightning" element={&lt;LightningCheckoutPage />} /></pre>
+                    </section>
+                    
+                    <section id="btcpay">
+                        <h3>7. Configure o BTCPay Server</h3>
+                        <ol>
+                            <li>Acesse o painel de administração do BTCPay Server</li>
+                            <li>Crie uma nova loja ou use uma existente</li>
+                            <li>Ative o Lightning Network nas configurações da loja</li>
+                            <li>Gere uma API Key com permissões para gerenciar faturas</li>
+                            <li>Copie o Store ID e a API Key para o arquivo <code>.env</code></li>
+                        </ol>
+                        
+                        <div class="tip-box">
+                            <p><strong>Dica:</strong> Para ambiente de desenvolvimento, você pode usar o BTCPay Server Testnet em <a href="https://testnet.demo.btcpayserver.org/" target="_blank">https://testnet.demo.btcpayserver.org/</a>.</p>
+                        </div>
+                    </section>
+                    
+                    <section id="chainlink">
+                        <h3>8. Configure o Chainlink (para ambiente de produção)</h3>
+                        <ol>
+                            <li>Configure um nó Chainlink seguindo a <a href="https://docs.chain.link/" target="_blank">documentação oficial</a></li>
+                            <li>Crie um Job para verificação de entregas</li>
+                            <li>Copie o Job ID e o Oracle Address para o arquivo <code>.env</code></li>
+                        </ol>
+                    </section>
+                    
+                    <section id="smart-contract">
+                        <h3>9. Implante o Smart Contract de Escrow (para ambiente de produção)</h3>
+                        <ol>
+                            <li>Compile e implante o contrato de escrow na rede desejada (Ethereum, BSC, RSK)</li>
+                            <li>Copie o endereço do contrato para o arquivo <code>.env</code></li>
+                        </ol>
+                    </section>
+                </section>
+                
+                <section id="execucao">
+                    <h2>Executando o Projeto</h2>
+                    
+                    <h3>Ambiente de Desenvolvimento</h3>
+                    <pre>npm run dev</pre>
+                    
+                    <p>Ou usando yarn:</p>
+                    <pre>yarn dev</pre>
+                    
+                    <p>O servidor será iniciado na porta especificada no arquivo <code>.env</code> (padrão: 3000).</p>
+                    
+                    <h3>Ambiente de Produção</h3>
+                    <pre>npm run build
+npm start</pre>
+                    
+                    <p>Ou usando yarn:</p>
+                    <pre>yarn build
+yarn start</pre>
+                </section>
+                
+                <section id="testes">
+                    <h2>Testando a Instalação</h2>
+                    
+                    <h3>Executar Testes Unitários</h3>
+                    <pre>npm test</pre>
+                    
+                    <p>Ou usando yarn:</p>
+                    <pre>yarn test</pre>
+                    
+                    <h3>Testar Manualmente</h3>
+                    <ol>
+                        <li>Acesse <code>http://localhost:3000</code> (ou a URL do seu servidor)</li>
+                        <li>Navegue até um produto</li>
+                        <li>Escolha "Pagar com Lightning Network" no checkout</li>
+                        <li>Verifique se a fatura Lightning é gerada corretamente</li>
+                        <li>Teste o pagamento usando uma carteira Lightning de teste</li>
+                    </ol>
+                </section>
+                
+                <section id="solucao">
+                    <h2>Solução de Problemas</h2>
+                    
+                    <h3>Erro de Conexão com BTCPay Server</h3>
+                    <p>Verifique se:</p>
+                    <ul>
+                        <li>A URL do BTCPay Server está correta</li>
+                        <li>A API Key tem permissões suficientes</li>
+                        <li>O Store ID está correto</li>
+                    </ul>
+                    
+                    <h3>Erro ao Gerar Fatura Lightning</h3>
+                    <p>Verifique se:</p>
+                    <ul>
+                        <li>O nó Lightning do BTCPay Server está ativo e com canais abertos</li>
+                        <li>A configuração do Lightning Network está correta na loja</li>
+                    </ul>
+                    
+                    <h3>Erro de Conexão com IPFS</h3>
+                    <p>Verifique se:</p>
+                    <ul>
+                        <li>A URL da API IPFS está correta</li>
+                        <li>A API Key tem permissões suficientes</li>
+                    </ul>
+                    
+                    <h3>Erro ao Verificar Entregas</h3>
+                    <p>Verifique se:</p>
+                    <ul>
+                        <li>As APIs de rastreamento estão configuradas corretamente</li>
+                        <li>As API Keys das transportadoras são válidas</li>
+                    </ul>
+                </section>
+                
+                <section id="atualizacoes">
+                    <h2>Atualizações e Manutenção</h2>
+                    
+                    <h3>Atualizando o Sistema</h3>
+                    <pre>git pull
+npm install
+npm run build</pre>
+                    
+                    <p>Ou usando yarn:</p>
+                    <pre>git pull
+yarn install
+yarn build</pre>
+                    
+                    <h3>Backup do Banco de Dados</h3>
+                    <p>Recomendamos fazer backup regular do banco de dados MongoDB:</p>
+                    <pre>mongodump --uri="mongodb://seu-servidor:27017/paybyt" --out=/caminho/para/backup</pre>
+                </section>
+                
+                <section id="suporte">
+                    <h2>Suporte</h2>
+                    <p>Para suporte técnico, entre em contato:</p>
+                    <ul>
+                        <li>E-mail: suporte.tecnico@paybyt.com</li>
+                        <li>GitHub: Abra uma issue em <a href="https://github.com/Daniellobo989/paybytmvp/issues" target="_blank">https://github.com/Daniellobo989/paybytmvp/issues</a></li>
+                    </ul>
+                </section>
+                
+                <div style="margin-top: 40px;">
+                    <a href="index.html" class="btn">Voltar para a Página Inicial</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container footer-content">
+            <p>© 2025 PayByt. Todos os direitos reservados.</p>
+            <p>Marketplace descentralizado com Bitcoin</p>
+        </div>
+    </footer>
+</body>
+</html>
