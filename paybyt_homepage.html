@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayByt - Marketplace Descentralizado com Bitcoin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f4f4;
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    header {
+      background-color: #002D72;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .logo {
+      height: 60px;
+      margin-right: 10px;
+    }
+    header h1 {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 2.5rem;
+    }
+    .hero {
+      background-color: #002D72;
+      color: white;
+      text-align: center;
+      padding: 60px 0;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .hero h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      font-weight: normal;
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    .feature {
+      flex-basis: 30%;
+      background: white;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .bitcoin-accent {
+      color: #F7931A;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #F7931A;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+      background-color: #e67e00;
+    }
+    footer {
+      background-color: #002D72;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
+    @media (max-width: 768px) {
+      .feature {
+        flex-basis: 100%;
+      }
+    }
+    
+    /* Estilos para a seção de produtos */
+    .products-section {
+      margin: 60px 0;
+    }
+    
+    .products-title {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #002D72;
+    }
+    
+    .products-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+    
+    .product-card {
+      flex-basis: 280px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .product-details {
+      padding: 20px;
+    }
+    
+    .product-category {
+      display: inline-block;
+      background-color: #f0f0f0;
+      color: #666;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+    
+    .product-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #002D72;
+    }
+    
+    .product-price {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #F7931A;
+      margin-bottom: 15px;
+    }
+    
+    .product-description {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    
+    .product-button {
+      display: inline-block;
+      background-color: #F7931A;
+      color: white;
+      padding: 8px 15px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    
+    .product-button:hover {
+      background-color: #e67e00;
+    }
+    
+    .product-rating {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .product-stars {
+      color: #F7931A;
+      margin-right: 5px;
+    }
+    
+    .product-reviews {
+      font-size: 0.8rem;
+      color: #666;
+    }
+    
+    /* Estilos para a seção de verificação de entrega */
+    .delivery-verification {
+      background-color: #e8f5e9;
+      padding: 30px;
+      border-radius: 10px;
+      margin: 40px 0;
+      text-align: center;
+    }
+    
+    .delivery-title {
+      color: #155724;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+    
+    .delivery-description {
+      color: #155724;
+      margin-bottom: 25px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .delivery-button {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    
+    .delivery-button:hover {
+      background-color: #3d8b40;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <img src="https://raw.githubusercontent.com/Daniellobo989/paybytmvp/main/logo.png" alt="PayByt Logo" class="logo">
+      <h1>PayByt</h1>
+    </div>
+  </header>
+  
+  <section class="hero">
+    <div class="container">
+      <h1>Bem-vindo ao <span class="bitcoin-accent">PayByt</span></h1>
+      <h2>Marketplace Descentralizado com Bitcoin</h2>
+      <p>Compre e venda com segurança usando apenas Bitcoin como forma de pagamento.</p>
+      <a href="#features" class="cta-button">Conheça as Funcionalidades</a>
+    </div>
+  </section>
+  
+  <!-- Seção de produtos em destaque -->
+  <section class="products-section">
+    <div class="container">
+      <h2 class="products-title">Produtos em Destaque</h2>
+      <div class="products-container">
+        <!-- iPhone -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="iPhone 13 Pro" class="product-image">
+          <div class="product-details">
+            <span class="product-category">Eletrônicos</span>
+            <h3 class="product-title">iPhone 13 Pro - 256GB</h3>
+            <div class="product-rating">
+              <span class="product-stars">★★★★★</span>
+              <span class="product-reviews">(128 avaliações)</span>
+            </div>
+            <p class="product-price">0.015 BTC</p>
+            <p class="product-description">iPhone 13 Pro com 256GB de armazenamento, câmera tripla de 12MP e tela Super Retina XDR de 6.1".</p>
+            <a href="payment_escrow.html" class="product-button">Comprar Agora</a>
+          </div>
+        </div>
+        
+        <!-- Brinquedo -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1558060370-d644479cb6f7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Lego Star Wars" class="product-image">
+          <div class="product-details">
+            <span class="product-category">Brinquedos</span>
+            <h3 class="product-title">Lego Star Wars - Millennium Falcon</h3>
+            <div class="product-rating">
+              <span class="product-stars">★★★★☆</span>
+              <span class="product-reviews">(87 avaliações)</span>
+            </div>
+            <p class="product-price">0.008 BTC</p>
+            <p class="product-description">Kit Lego Star Wars Millennium Falcon com 1351 peças, 7 minifiguras incluindo Han Solo e Chewbacca.</p>
+            <a href="payment_escrow.html" class="product-button">Comprar Agora</a>
+          </div>
+        </div>
+        
+        <!-- Curso -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Curso de Bitcoin" class="product-image">
+          <div class="product-details">
+            <span class="product-category">Cursos</span>
+            <h3 class="product-title">Curso Completo de Bitcoin e Criptomoedas</h3>
+            <div class="product-rating">
+              <span class="product-stars">★★★★★</span>
+              <span class="product-reviews">(215 avaliações)</span>
+            </div>
+            <p class="product-price">0.003 BTC</p>
+            <p class="product-description">Curso completo com 40 horas de conteúdo sobre Bitcoin, blockchain, carteiras, segurança e investimentos.</p>
+            <a href="payment_escrow.html" class="product-button">Comprar Agora</a>
+          </div>
+        </div>
+        
+        <!-- Livro -->
+        <div class="product-card">
+          <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Livro Bitcoin" class="product-image">
+          <div class="product-details">
+            <span class="product-category">Livros</span>
+            <h3 class="product-title">O Padrão Bitcoin</h3>
+            <div class="product-rating">
+              <span class="product-stars">★★★★★</span>
+              <span class="product-reviews">(156 avaliações)</span>
+            </div>
+            <p class="product-price">0.001 BTC</p>
+            <p class="product-description">A alternativa descentralizada ao banco central. Livro físico com 304 páginas sobre a revolução monetária do Bitcoin.</p>
+            <a href="payment_escrow.html" class="product-button">Comprar Agora</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Nova seção para verificação de entrega -->
+  <section class="delivery-verification">
+    <div class="container">
+      <h2 class="delivery-title">Verificação de Entrega via Oráculos Blockchain</h2>
+      <p class="delivery-description">Acompanhe o status de entrega dos seus produtos através do nosso sistema de oráculos blockchain. Verificação automática para produtos físicos e digitais, com confirmação segura e transparente.</p>
+      <a href="file:///Users/daniellobo/Downloads/docs%202/html/demo_oracle.html" class="delivery-button">Acessar Verificação de Entrega</a>
+    </div>
+  </section>
+  
+  <div class="container" id="features">
+    <h2 style="text-align: center; margin: 40px 0;">Funcionalidades Principais</h2>
+    <div class="features">
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Autenticação Anônima</h3>
+        <p>Registre-se e faça login sem fornecer informações pessoais identificáveis, garantindo sua privacidade.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Escrow Multisig</h3>
+        <p>Transações seguras com contratos multisig 2-de-3 para proteção de compradores e vendedores.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Pagamentos em Bitcoin</h3>
+        <p>Suporte para transações on-chain e Lightning Network para pagamentos rápidos e com baixas taxas.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Chat Criptografado</h3>
+        <p>Comunicação segura entre compradores e vendedores para negociação de detalhes.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Resolução de Disputas</h3>
+        <p>Sistema de mediação imparcial quando necessário para resolver conflitos entre as partes.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="bitcoin-accent">✓</span> Privacidade e Segurança</h3>
+        <p>Projetado para oferecer máxima privacidade e segurança em todas as transações.</p>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin: 60px 0; padding: 30px; background-color: #f9f9f9; border-radius: 10px;">
+      <h2>Versão MVP em Desenvolvimento</h2>
+      <p>O PayByt está atualmente em fase de desenvolvimento. Esta página é uma prévia do marketplace descentralizado que estamos construindo.</p>
+      <p>Em breve, você poderá comprar e vender produtos e serviços usando exclusivamente Bitcoin como forma de pagamento, com todas as vantagens de um sistema descentralizado.</p>
+      <a href="#" class="cta-button">Inscreva-se para Atualizações</a>
+    </div>
+    
+    <div style="text-align: center; margin: 40px 0;">
+      <h2>Por que escolher o PayByt?</h2>
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-top: 30px;">
+        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <h3>Sem Intermediários</h3>
+          <p>Transações diretas entre compradores e vendedores, sem taxas de intermediários.</p>
+        </div>
+        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <h3>Proteção de Fundos</h3>
+          <p>Sistema de escrow multisig garante que o dinheiro só é liberado quando ambas as partes estão satisfeitas.</p>
+        </div>
+        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <h3>Anonimato</h3>
+          <p>Compre e venda sem revelar sua identidade, mantendo sua privacidade.</p>
+        </div>
+        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <h3>Resistente à Censura</h3>
+          <p>Sistema descentralizado que não pode ser censurado ou controlado por governos ou corporações.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <div class="container">
+      <p>© 2025 PayByt - Todos os direitos reservados</p>
+      <p>O marketplace descentralizado com Bitcoin como única forma de pagamento</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecionando para Verificação de Entrega - PayByt</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      text-align: center;
+      padding: 50px 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    .logo {
+      height: 80px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #002D72;
+      margin-bottom: 20px;
+    }
+    p {
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+    .loading {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 5px solid #F7931A;
+      animation: spin 1s linear infinite;
+      margin: 20px 0;
+    }
+    .manual-link {
+      display: inline-block;
+      background-color: #F7931A;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+    .manual-link:hover {
+      background-color: #e67e00;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://raw.githubusercontent.com/Daniellobo989/paybytmvp/main/logo.png" alt="PayByt Logo" class="logo">
+    <h1>Redirecionando para Verificação de Entrega</h1>
+    <p>Você está sendo redirecionado para o sistema de verificação de entrega via oráculos blockchain...</p>
+    <div class="loading"></div>
+    <p>Se o redirecionamento não ocorrer automaticamente em 5 segundos, clique no botão abaixo:</p>
+    <a href="file:///Users/daniellobo/Downloads/docs%202/html/demo_oracle.html" class="manual-link" id="manual-link">Acessar Verificação de Entrega</a>
+  </div>
+
+  <script>
+    // Função para tentar diferentes métodos de redirecionamento
+    function tryRedirect() {
+      // Método 1: Redirecionamento simples
+      window.location.href = "file:///Users/daniellobo/Downloads/docs%202/html/demo_oracle.html";
+      
+      // Método 2: Timeout para tentar novamente com outra abordagem
+      setTimeout(function() {
+        // Se ainda estamos nesta página, tente outro método
+        try {
+          // Método 3: Abrir em nova janela/aba
+          window.open("file:///Users/daniellobo/Downloads/docs%202/html/demo_oracle.html", "_blank");
+        } catch (e) {
+          console.log("Erro ao redirecionar: " + e);
+        }
+      }, 2000);
+    }
+    
+    // Iniciar redirecionamento quando a página carregar
+    window.onload = function() {
+      // Pequeno atraso para garantir que a página seja exibida antes do redirecionamento
+      setTimeout(tryRedirect, 1500);
+      
+      // Atualizar o link manual para garantir que funcione
+      document.getElementById('manual-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        tryRedirect();
+      });
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayByt - Demo Lightning QR Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #f8b400;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .content {
+            padding: 40px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        h3 {
+            color: var(--dark-color);
+            margin: 25px 0 15px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .info-box {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning-box {
+            background-color: #fff8e1;
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .tip-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .qr-code {
+            margin: 20px 0;
+        }
+        
+        .payment-details {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .payment-details h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        .payment-details p {
+            margin-bottom: 10px;
+        }
+        
+        .payment-details .label {
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .payment-details .value {
+            font-family: 'Courier New', Courier, monospace;
+            word-break: break-all;
+            background-color: #f5f5f5;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        
+        .copy-btn {
+            background-color: var(--secondary-color);
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        
+        .copy-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .status.pending {
+            background-color: #fff8e1;
+            color: #856404;
+        }
+        
+        .status.paid {
+            background-color: #e8f5e9;
+            color: #155724;
+        }
+        
+        .status.expired {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .timer {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="logo.png" alt="PayByt Logo">
+                <h1>PayByt</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="documentacao_tecnica.html">Documentação Técnica</a></li>
+                    <li><a href="manual_usuario.html">Manual do Usuário</a></li>
+                    <li><a href="guia_instalacao.html">Guia de Instalação</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container content">
+        <h1 style="color: var(--primary-color); margin-bottom: 20px;">Demonstração de Pagamento Lightning Network</h1>
+        
+        <p>Esta é uma demonstração interativa de como funciona o pagamento via Lightning Network no marketplace PayByt. Você pode gerar um QR code de pagamento Lightning Network simulado e ver como seria a experiência do usuário.</p>
+        
+        <div class="info-box">
+            <p><strong>Nota:</strong> Esta é uma demonstração simulada. Nenhum pagamento real será processado.</p>
+        </div>
+        
+        <h2>Gerar QR Code de Pagamento</h2>
+        
+        <form id="payment-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="amount">Valor (BTC)</label>
+                    <input type="number" id="amount" step="0.00000001" min="0.00000001" value="0.001" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Descrição</label>
+                    <input type="text" id="description" value="Compra no marketplace PayByt" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="gateway">Gateway de Pagamento</label>
+                    <select id="gateway">
+                        <option value="btcpay">BTCPay Server</option>
+                        <option value="opennode">OpenNode</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="expiry">Expiração (minutos)</label>
+                    <input type="number" id="expiry" min="1" max="60" value="15" required>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">Gerar QR Code</button>
+        </form>
+        
+        <div id="qr-container" class="qr-container" style="display: none;">
+            <h3>QR Code de Pagamento Lightning Network</h3>
+            <div id="qr-code" class="qr-code"></div>
+            
+            <div class="payment-details">
+                <h3>Detalhes do Pagamento</h3>
+                <p><span class="label">Valor:</span> <span id="payment-amount" class="value"></span> BTC</p>
+                <p><span class="label">Taxa da Plataforma (1%):</span> <span id="payment-fee" class="value"></span> BTC</p>
+                <p><span class="label">Total:</span> <span id="payment-total" class="value"></span> BTC</p>
+                <p>
+                    <span class="label">Invoice Lightning:</span> 
+                    <span id="payment-invoice" class="value"></span>
+                    <button id="copy-invoice" class="copy-btn">Copiar</button>
+                </p>
+                
+                <div id="payment-status" class="status pending">Aguardando Pagamento</div>
+                <div id="payment-timer" class="timer">Expira em: 15:00</div>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <button id="btn-pay" class="btn">Simular Pagamento</button>
+                <button id="btn-cancel" class="btn" style="background-color: var(--danger-color); margin-left: 10px;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container footer-content">
+            <p>© 2025 PayByt. Todos os direitos reservados.</p>
+            <p>Marketplace descentralizado com Bitcoin</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentForm = document.getElementById('payment-form');
+            const qrContainer = document.getElementById('qr-container');
+            const qrCodeElement = document.getElementById('qr-code');
+            const paymentAmount = document.getElementById('payment-amount');
+            const paymentFee = document.getElementById('payment-fee');
+            const paymentTotal = document.getElementById('payment-total');
+            const paymentInvoice = document.getElementById('payment-invoice');
+            const paymentStatus = document.getElementById('payment-status');
+            const paymentTimer = document.getElementById('payment-timer');
+            const btnPay = document.getElementById('btn-pay');
+            const btnCancel = document.getElementById('btn-cancel');
+            const copyInvoice = document.getElementById('copy-invoice');
+            
+            let timerInterval;
+            let expiryTime;
+            
+            // Gerar fatura Lightning simulada
+            function generateLightningInvoice(amount, description) {
+                // Simulação de uma fatura Lightning Network (BOLT11)
+                const prefix = 'lnbc';
+                const amountPart = Math.floor(amount * 100000000); // Converter para satoshis
+                const timestamp = Math.floor(Date.now() / 1000);
+                const randomPart = Array.from({length: 20}, () => Math.floor(Math.random() * 36).toString(36)).join('');
+                
+                return `${prefix}${amountPart}n1p${randomPart}dqdgqvpshjsmkd8kuk2z0fwxgrslv93jqjgntdp5908hmmm69unfvdknjqmn0wvhxcmmrdp5xys${timestamp}`;
+            }
+            
+            // Gerar QR code
+            function generateQRCode(text) {
+                qrCodeElement.innerHTML = '';
+                QRCode.toCanvas(qrCodeElement, text, {
+                    width: 250,
+                    margin: 1,
+                    color: {
+                        dark: '#000000',
+                        light: '#ffffff'
+                    }
+                }, function(error) {
+                    if (error) console.error(error);
+                });
+            }
+            
+            // Atualizar timer
+            function updateTimer() {
+                const now = new Date().getTime();
+                const distance = expiryTime - now;
+                
+                if (distance <= 0) {
+                    clearInterval(timerInterval);
+                    paymentStatus.className = 'status expired';
+                    paymentStatus.textContent = 'Fatura Expirada';
+                    paymentTimer.textContent = 'Expirado';
+                    btnPay.disabled = true;
+                    return;
+                }
+                
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                paymentTimer.textContent = `Expira em: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Iniciar timer
+            function startTimer(minutes) {
+                clearInterval(timerInterval);
+                expiryTime = new Date().getTime() + minutes * 60 * 1000;
+                updateTimer();
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            // Evento de submissão do formulário
+            paymentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const amount = parseFloat(document.getElementById('amount').value);
+                const description = document.getElementById('description').value;
+                const gateway = document.getElementById('gateway').value;
+                const expiry = parseInt(document.getElementById('expiry').value);
+                
+                // Calcular taxa da plataforma (1%)
+                const fee = amount * 0.01;
+                const total = amount + fee;
+                
+                // Gerar fatura Lightning
+                const invoice = generateLightningInvoice(total, description);
+                
+                // Atualizar detalhes do pagamento
+                paymentAmount.textContent = amount.toFixed(8);
+                paymentFee.textContent = fee.toFixed(8);
+                paymentTotal.textContent = total.toFixed(8);
+                paymentInvoice.textContent = invoice;
+                
+                // Gerar QR code
+                generateQRCode(invoice);
+                
+                // Resetar status
+                paymentStatus.className = 'status pending';
+                paymentStatus.textContent = 'Aguardando Pagamento';
+                btnPay.disabled = false;
+                
+                // Iniciar timer
+                startTimer(expiry);
+                
+                // Mostrar container do QR code
+                qrContainer.style.display = 'flex';
+            });
+            
+            // Evento de clique no botão de simular pagamento
+            btnPay.addEventListener('click', function() {
+                clearInterval(timerInterval);
+                paymentStatus.className = 'status paid';
+                paymentStatus.textContent = 'Pagamento Confirmado';
+                paymentTimer.textContent = 'Pagamento processado com sucesso!';
+                btnPay.disabled = true;
+            });
+            
+            // Evento de clique no botão de cancelar
+            btnCancel.addEventListener('click', function() {
+                clearInterval(timerInterval);
+                qrContainer.style.display = 'none';
+            });
+            
+            // Evento de clique no botão de copiar invoice
+            copyInvoice.addEventListener('click', function() {
+                const invoice = paymentInvoice.textContent;
+                navigator.clipboard.writeText(invoice).then(function() {
+                    copyInvoice.textContent = 'Copiado!';
+                    setTimeout(function() {
+                        copyInvoice.textContent = 'Copiar';
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

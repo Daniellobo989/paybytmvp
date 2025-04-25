@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayByt - Integração Lightning Network</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #f8b400;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .content {
+            padding: 40px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        
+        .main-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .main-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            background-color: #f5f5f5;
+            margin-right: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .main-tab.active {
+            background-color: #fff;
+            border-color: #ddd;
+            border-bottom: 1px solid #fff;
+            margin-bottom: -1px;
+            color: var(--primary-color);
+        }
+        
+        .main-tab:hover {
+            background-color: #e9e9e9;
+        }
+        
+        .main-tab.active:hover {
+            background-color: #fff;
+        }
+        
+        .main-content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .main-content.active {
+            display: block;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        h3 {
+            color: var(--dark-color);
+            margin: 25px 0 15px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .info-box {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning-box {
+            background-color: #fff8e1;
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .tip-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            background-color: #f5f5f5;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background-color: #fff;
+            border-color: #ddd;
+            border-bottom: 1px solid #fff;
+            margin-bottom: -1px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Estilos para a demonstração de pagamento Lightning */
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .qr-code {
+            margin: 20px 0;
+        }
+        
+        .payment-details {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .payment-details h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        .payment-details p {
+            margin-bottom: 10px;
+        }
+        
+        .payment-details .label {
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .payment-details .value {
+            font-family: 'Courier New', Courier, monospace;
+            word-break: break-all;
+            background-color: #f5f5f5;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        
+        .copy-btn {
+            background-color: var(--secondary-color);
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        
+        .copy-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .status.pending {
+            background-color: #fff8e1;
+            color: #856404;
+        }
+        
+        .status.paid {
+            background-color: #e8f5e9;
+            color: #155724;
+        }
+        
+        .status.expired {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .timer {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        /* Estilos para a demonstração de oráculos */
+        .tracking-container {
+            margin-top: 30px;
+        }
+        
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .tracking-details {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .tracking-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .tracking-status.pending {
+            background-color: #fff8e1;
+            color: #856404;
+        }
+        
+        .tracking-status.in-transit {
+            background-color: #e8f4fd;
+            color: #004085;
+        }
+        
+        .tracking-status.delivered {
+            background-color: #e8f5e9;
+            color: #155724;
+        }
+        
+        .tracking-status.failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .tracking-timeline {
+            margin-top: 30px;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .tracking-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 10px;
+            width: 2px;
+            background-color: #ddd;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 2px solid #ddd;
+        }
+        
+        .timeline-item.active::before {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .timeline-item.completed::before {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+        
+        .timeline-date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-content {
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .blockchain-verification {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .blockchain-verification h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        .verification-details {
+            margin-top: 20px;
+        }
+        
+        .verification-item {
+            display: flex;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .verification-label {
+            width: 150px;
+            font-weight: 500;
+        }
+        
+        .verification-value {
+            flex: 1;
+            font-family: 'Courier New', Courier, monospace;
+            word-break: break-all;
+        }
+        
+        .digital-delivery-container {
+            margin-top: 30px;
+        }
+        
+        .digital-product {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        
+        .digital-product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .digital-product-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .digital-product-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .digital-product-status.sent {
+            background-color: #e8f4fd;
+            color: #004085;
+        }
+        
+        .digital-product-status.received {
+            background-color: #fff8e1;
+            color: #856404;
+        }
+        
+        .digital-product-status.confirmed {
+            background-color: #e8f5e9;
+            color: #155724;
+        }
+        
+        .digital-product-details {
+            margin-top: 15px;
+        }
+        
+        .digital-product-key {
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: 15px;
+        }
+        
+        .ipfs-proof {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        .ipfs-proof-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .ipfs-proof-title {
+            font-weight: 500;
+        }
+        
+        .ipfs-hash {
+            font-family: 'Courier New', Courier, monospace;
+            word-break: break-all;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        /* Estilos para a documentação */
+        .doc-content {
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 250px;
+            padding-right: 20px;
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .sidebar ul li ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .main-doc-content {
+            flex: 1;
+            padding-left: 20px;
+            border-left: 1px solid #ddd;
+        }
+        
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        .image-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .doc-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                padding-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .main-doc-content {
+                padding-left: 0;
+                border-left: none;
+            }
+            
+            .verification-item {
+                flex-direction: column;
+            }
+            
+            .verification-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="logo.png" alt="PayByt Logo">
+                <h1>PayByt</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a onclick="showTab('home')">Início</a></li>
+                    <li><a onclick="showTab('documentation')">Documentação</a></li>
+                    <li><a onclick="showTab('payment-demo')">Demo Pagamento</a></li>
+                    <li><a onclick="showTab('oracle-demo')">Demo Oráculos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container content">
+        <!-- Abas principais -->
+        <div class="main-tabs">
+            <div class="main-tab active" data-tab="home">Início</div>
+            <div class="main-tab" data-tab="documentation">Documentação</div>
+            <div class="main-tab" data-tab="payment-demo">Demo Pagamento</div>
+            <div class="main-tab" data-tab="oracle-demo">Demo Oráculos</div>
+        </div>
+        
+        <!-- Conteúdo da aba Início -->
+        <div id="home" class="main-content active">
+            <h1 style="color: var(--primary-color); margin-bottom: 20px;">Integração Lightning Network PayByt</h1>
+            
+            <div class="image-container">
+                <img src="logo.png" alt="PayByt Logo" style="height: 100px;">
+            </div>
+            
+            <p>Bem-vindo à documentação e demonstração da integração Lightning Network para o marketplace PayByt! Este sistema permite pagamentos instantâneos com Bitcoin através da Lightning Network, além de verificação automática de entregas via oráculos blockchain.</p>
+            
+            <div class="info-box">
+                <p><strong>Principais recursos:</strong></p>
+                <ul>
+                    <li>Pagamentos instantâneos via Lightning Network</li>
+                    <li>Verificação automática de entregas físicas e digitais</li>
+                    <li>Sistema de taxas transparente (1% da plataforma)</li>
+                    <li>Integração com múltiplos gateways (BTCPay Server e OpenNode)</li>
+                    <li>Provas criptográficas de entrega via IPFS e blockchain</li>
+                </ul>
+            </div>
+            
+            <h2>Navegação Rápida</h2>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 30px;">
+                <div style="flex: 1; min-width: 300px; background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: var(--primary-color);">Documentação</h3>
+                    <p>Acesse a documentação completa da integração Lightning Network, incluindo documentação técnica, manual do usuário e guia de instalação.</p>
+                    <button class="btn" onclick="showTab('documentation')">Ver Documentação</button>
+                </div>
+                
+                <div style="flex: 1; min-width: 300px; background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: var(--primary-color);">Demo de Pagamento</h3>
+                    <p>Experimente a demonstração interativa de pagamentos Lightning Network, gerando QR codes e simulando transações.</p>
+                    <button class="btn" onclick="showTab('payment-demo')">Ver Demo de Pagamento</button>
+                </div>
+                
+                <div style="flex: 1; min-width: 300px; background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                    <h3 style="color: var(--primary-color);">Demo de Oráculos</h3>
+                    <p>Experimente a demonstração interativa do sistema de oráculos para verificação de entregas físicas e digitais.</p>
+                    <button class="btn" onclick="showTab('oracle-demo')">Ver Demo de Oráculos</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Conteúdo da aba Documentação -->
+        <div id="documentation" class="main-content">
+            <div class="tabs">
+                <div class="tab active" data-tab="doc-technical">Documentação Técnica</div>
+                <div class="tab" data-tab="doc-user">Manual do Usuário</div>
+                <div class="tab" data-tab="doc-install">Guia de Instalação</div>
+            </div>
+            
+            <!-- Documentação Técnica -->
+            <div id="doc-technical" class="tab-content active">
+                <div class="doc-content">
+                    <div class="sidebar">
+                        <ul>
+                            <li><a onclick="scrollToElement('tech-intro')">Introdução</a></li>
+                            <li><a onclick="scrollToElement('tech-architecture')">Arquitetura</a></li>
+                            <li><a onclick="scrollToElement('tech-components')">Componentes</a>
+                                <ul>
+                                    <li><a onclick="scrollToElement('tech-lightning')">Serviço Lightning</a></li>
+                                    <li><a onclick="scrollToElement('tech-oracle')">Serviço de Oráculos</a></li>
+                                    <li><a onclick="scrollToElement('tech-fee')">Serviço de Taxas</a></li>
+                                </ul>
+                            </li>
+                            <li><a onclick="scrollToElement('tech-api')">API</a></li>
+                            <li><a onclick="scrollToElement('tech-security')">Segurança</a></li>
+                            <li><a onclick="scrollToElement('tech-integration')">Integração</a></li>
+                        </ul>
+                    </div>
+                    <div class="main-doc-content">
+                        <h1 style="color: var(--primary-color); margin-bottom: 20px;">Documentação Técnica - Integração Lightning Network</h1>
+                        
+                        <section id="tech-intro">
+                            <h2>Introdução</h2>
+                            <p>Esta documentação técnica descreve a implementação da integração Lightning Network para o marketplace PayByt, incluindo o sistema de oráculos para verificação de entrega e o sistema de taxas da plataforma.</p>
+                            
+                            <p>A integração foi desenvolvida utilizando as seguintes tecnologias:</p>
+                            <ul>
+                                <li><strong>Frontend</strong>: React.js, TypeScript, Tailwind CSS</li>
+                                <li><strong>Backend</strong>: Node.js, Express</li>
+                                <li><strong>Blockchain</strong>: Bitcoin, Lightning Network</li>
+                                <li><strong>Gateways</strong>: BTCPay Server, OpenNode</li>
+                                <li><strong>Oráculos</strong>: Chainlink</li>
+                                <li><strong>Armazenamento</strong>: IPFS</li>
+                                <li><strong>Smart Contracts</strong>: Solidity (Ethereum/BSC/RSK)</li>
+                            </ul>
+                        </section>
+                        
+                        <section id="tech-architecture">
+                            <h2>Arquitetura</h2>
+                            <p>A arquitetura da integração Lightning Network é modular e extensível, permitindo a adição de novos gateways de pagamento e provedores de oráculos no futuro.</p>
+                            
+                            <h3>Diagrama de Arquitetura</h3>
+                            <pre>
++------------------+     +------------------+     +------------------+
+|                  |     |                  |     |                  |
+|  Frontend React  |<--->|  Backend Node.js |<--->|  Gateways LN     |
+|                  |     |                  |     |  (BTCPay/OpenNode)|
++------------------+     +------------------+     +------------------+
+                               |      |
+                               |      |
+                               v      v
+                         +------------+  +------------+
+                         |            |  |            |
+                         | Oráculos   |  | Smart      |
+                         | Chainlink  |  | Contracts  |
+                         |            |  |            |
+                         +------------+  +------------+
+                               |               |
+                               v               v
+                         +------------+  +------------+
+                         |            |  |            |
+                         | IPFS       |  | Blockchain |
+                         |            |  |            |
+                         +------------+  +------------+
+</pre>
+                            
+                            <p>A arquitetura segue o padrão MVC (Model-View-Controller) com serviços adicionais para lidar com funcionalidades específicas:</p>
+                            <ul>
+                                <li><strong>Models</strong>: Representam os dados da aplicação</li>
+                                <li><strong>Views</strong>: Componentes React para a interface do usuário</li>
+                                <li><strong>Controllers</strong>: Gerenciam as requisições e respostas da API</li>
+                                <li><strong>Services</strong>: Implementam a lógica de negócio</li>
+                                <li><strong>Adapters</strong>: Conectam a aplicação a serviços externos</li>
+                            </ul>
+                        </section>
+                        
+                        <section id="tech-components">
+                            <h2>Componentes</h2>
+                            <p>A integração Lightning Network é composta por três componentes principais:</p>
+                            
+                            <section id="tech-lightning">
+                                <h3>Serviço Lightning Network</h3>
+                                <p>O serviço Lightning Network é responsável por gerenciar pagamentos via Lightning Network, incluindo a criação de faturas, verificação de pagamentos e processamento de webhooks.</p>
+                                
+                                <h4>Principais Classes e Métodos</h4>
+                                <pre>
+class LightningService {
+    // Cria uma fatura Lightning Network
+    async createInvoice(amount, description, metadata)
+    
+    // Verifica o status de uma fatura
+    async checkInvoiceStatus(invoiceId)
+    
+    // Processa webhooks de confirmação de pagamento
+    async processPaymentWebhook(payload)
+    
+    // Calcula a taxa da plataforma
+    async calculatePlatformFee(amount)
+}
+
+class BTCPayServerAdapter {
+    // Implementa a integração com BTCPay Server
+}
+
+class OpenNodeAdapter {
+    // Implementa a integração com OpenNode
+}
+</pre>
+                            </section>
+                            
+                            <section id="tech-oracle">
+                                <h3>Serviço de Oráculos</h3>
+                                <p>O serviço de oráculos é responsável por verificar a entrega de produtos físicos e digitais, utilizando Chainlink para enviar confirmações para o blockchain.</p>
+                                
+                                <h4>Principais Classes e Métodos</h4>
+                                <pre>
+class OracleService {
+    // Registra um código de rastreio para monitoramento
+    async registerTrackingCode(trackingCode, carrier, orderId)
+    
+    // Verifica o status de entrega de um produto físico
+    async checkDeliveryStatus(trackingCode)
+    
+    // Registra uma prova de entrega no IPFS
+    async registerDeliveryProof(orderId, proof)
+    
+    // Confirma a entrega no blockchain via Chainlink
+    async confirmDeliveryOnChain(orderId)
+}
+
+class ChainlinkDeliveryAdapter {
+    // Implementa a integração com Chainlink para verificação de entregas
+}
+
+class IPFSProofAdapter {
+    // Implementa o armazenamento de provas no IPFS
+}
+</pre>
+                            </section>
+                            
+                            <section id="tech-fee">
+                                <h3>Serviço de Taxas</h3>
+                                <p>O serviço de taxas é responsável por calcular e gerenciar a taxa de 1% da plataforma, além de estimar taxas de mineração e roteamento.</p>
+                                
+                                <h4>Principais Classes e Métodos</h4>
+                                <pre>
+class FeeService {
+    // Calcula a taxa da plataforma (1%)
+    async calculatePlatformFee(amount)
+    
+    // Estima taxas de mineração para transações on-chain
+    async estimateMiningFee(txSize)
+    
+    // Estima taxas de roteamento para Lightning Network
+    async estimateRoutingFee(amount)
+    
+    // Registra uma taxa coletada
+    async recordFeeCollection(amount, orderId)
+}
+
+class FeeDistributionService {
+    // Distribui as taxas coletadas entre diferentes destinos
+    async distributeFees(amount)
+    
+    // Gera relatórios de distribuição de taxas
+    async generateDistributionReport(startDate, endDate)
+}
+</pre>
+                            </section>
+                        </section>
+                        
+                        <section id="tech-api">
+                            <h2>API</h2>
+                            <p>A integração Lightning Network expõe as seguintes APIs RESTful:</p>
+                            
+                            <h3>API Lightning Network</h3>
+                            <pre>
+// Cria uma fatura Lightning Network
+POST /api/lightning/invoice
+Body: { amount, description, metadata }
+
+// Verifica o status de uma fatura
+GET /api/lightning/invoice/:invoiceId
+
+// Webhook para confirmação de pagamento
+POST /api/lightning/webhook
+</pre>
+                            
+                            <h3>API de Oráculos</h3>
+                            <pre>
+// Registra um código de rastreio
+POST /api/oracle/tracking
+Body: { trackingCode, carrier, orderId }
+
+// Verifica o status de entrega
+GET /api/oracle/tracking/:trackingCode
+
+// Registra uma prova de entrega
+POST /api/oracle/proof
+Body: { orderId, proof }
+
+// Confirma a entrega no blockchain
+POST /api/oracle/confirm
+Body: { orderId }
+</pre>
+                            
+                            <h3>API de Taxas</h3>
+                            <pre>
+// Calcula a taxa da plataforma
+GET /api/fee/calculate?amount=:amount
+
+// Estima taxas de mineração
+GET /api/fee/mining?txSize=:txSize
+
+// Estima taxas de roteamento
+GET /api/fee/routing?amount=:amount
+
+// Gera relatório de taxas
+GET /api/fee/report?startDate=:startDate&endDate=:endDate
+</pre>
+                        </section>
+                        
+                        <section id="tech-security">
+                            <h2>Segurança</h2>
+                            <p>A integração Lightning Network implementa as seguintes medidas de segurança:</p>
+                            
+                            <ul>
+                                <li><strong>Autenticação</strong>: JWT (JSON Web Tokens) para autenticação de API</li>
+                                <li><strong>Autorização</strong>: RBAC (Role-Based Access Control) para controle de acesso</li>
+                                <li><strong>Criptografia</strong>: HTTPS para comunicação segura</li>
+                                <li><strong>Validação</strong>: Validação de entrada para prevenir injeção de dados maliciosos</li>
+                                <li><strong>Rate Limiting</strong>: Limitação de taxa para prevenir ataques de força bruta</li>
+                                <li><strong>Logging</strong>: Registro de eventos para auditoria</li>
+                            </ul>
+                            
+                            <p>Além disso, as chaves privadas são armazenadas apenas no navegador do cliente, nunca no servidor, garantindo a segurança dos fundos.</p>
+                        </section>
+                        
+                        <section id="tech-integration">
+                            <h2>Integração</h2>
+                            <p>A integração Lightning Network pode ser facilmente integrada ao marketplace PayByt existente seguindo os passos descritos no Guia de Instalação.</p>
+                            
+                            <p>Os principais pontos de integração são:</p>
+                            <ul>
+                                <li>Adicionar os serviços ao backend existente</li>
+                                <li>Configurar as rotas de API</li>
+                                <li>Integrar os componentes de interface ao frontend</li>
+                                <li>Configurar os gateways de pagamento (BTCPay Server e OpenNode)</li>
+                                <li>Configurar os oráculos Chainlink</li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Manual do Usuário -->
+            <div id="doc-user" class="tab-content">
+                <div class="doc-content">
+                    <div class="sidebar">
+                        <ul>
+                            <li><a onclick="scrollToElement('user-intro')">Introdução</a></li>
+                            <li><a onclick="scrollToElement('user-lightning')">O que é Lightning Network?</a></li>
+                            <li><a onclick="scrollToElement('user-features')">Recursos Principais</a></li>
+                            <li><a onclick="scrollToElement('user-payment')">Como Realizar um Pagamento</a>
+                                <ul>
+                                    <li><a onclick="scrollToElement('user-buyers')">Para Compradores</a></li>
+                                    <li><a onclick="scrollToElement('user-sellers')">Para Vendedores</a></li>
+                                </ul>
+                            </li>
+                            <li><a onclick="scrollToElement('user-verification')">Verificação de Entrega</a>
+                                <ul>
+                                    <li><a onclick="scrollToElement('user-physical')">Produtos Físicos</a></li>
+                                    <li><a onclick="scrollToElement('user-digital')">Produtos Digitais</a></li>
+                                </ul>
+                            </li>
+                            <li><a onclick="scrollToElement('user-fees')">Sistema de Taxas</a></li>
+                            <li><a onclick="scrollToElement('user-faq')">Perguntas Frequentes</a></li>
+                        </ul>
+                    </div>
+                    <div class="main-doc-content">
+                        <h1 style="color: var(--primary-color); margin-bottom: 20px;">Manual do Usuário - Integração Lightning Network</h1>
+                        
+                        <section id="user-intro">
+                            <h2>Introdução</h2>
+                            <p>Bem-vindo ao manual do usuário da integração Lightning Network do PayByt! Este manual explica como utilizar os novos recursos de pagamento via Lightning Network, verificação de entrega e sistema de taxas implementados no marketplace PayByt.</p>
+                        </section>
+                        
+                        <section id="user-lightning">
+                            <h2>O que é Lightning Network?</h2>
+                            <p>Lightning Network é uma solução de segunda camada para o Bitcoin que permite transações instantâneas e com taxas extremamente baixas. Ao contrário das transações Bitcoin tradicionais (on-chain), que podem levar minutos ou horas para serem confirmadas, as transações Lightning são confirmadas em segundos.</p>
+                            
+                            <div class="info-box">
+                                <p><strong>Vantagens da Lightning Network:</strong></p>
+                                <ul>
+                                    <li>Transações instantâneas (confirmação em segundos)</li>
+                                    <li>Taxas extremamente baixas (frações de centavo)</li>
+                                    <li>Alta escalabilidade (milhões de transações por segundo)</li>
+                                    <li>Privacidade aprimorada</li>
+                                </ul>
+                            </div>
+                        </section>
+                        
+                        <section id="user-features">
+                            <h2>Recursos Principais</h2>
+                            <ul>
+                                <li><strong>Pagamentos Lightning Network</strong>: Transações rápidas e com baixas taxas</li>
+                                <li><strong>Verificação Automática de Entrega</strong>: Confirmação segura de entregas físicas e digitais</li>
+                                <li><strong>Sistema de Taxas Transparente</strong>: Taxa fixa de 1% da plataforma</li>
+                            </ul>
+                        </section>
+                        
+                        <section id="user-payment">
+                            <h2>Como Realizar um Pagamento via Lightning Network</h2>
+                            
+                            <section id="user-buyers">
+                                <h3>Para Compradores</h3>
+                                <ol>
+                                    <li><strong>Selecione um produto</strong> no marketplace PayByt</li>
+                                    <li>No checkout, escolha <strong>"Pagar com Lightning Network"</strong></li>
+                                    <li>O sistema gerará uma <strong>fatura Lightning</strong> com um QR code</li>
+                                    <li>Abra sua <strong>carteira Lightning</strong> (como Wallet of Satoshi, Muun, Phoenix, etc.)</li>
+                                    <li>Escaneie o QR code ou copie o código de pagamento</li>
+                                    <li>Confirme o pagamento na sua carteira</li>
+                                    <li>A página de checkout será atualizada automaticamente quando o pagamento for confirmado</li>
+                                </ol>
+                                
+                                <div class="tip-box">
+                                    <p><strong>Dica:</strong> Se você não tiver uma carteira Lightning, consulte a seção <a onclick="scrollToElement('user-faq')">Perguntas Frequentes</a> para recomendações de carteiras.</p>
+                                </div>
+                            </section>
+                            
+                            <section id="user-sellers">
+                                <h3>Para Vendedores</h3>
+                                <ol>
+                                    <li>Quando um comprador paga com Lightning Network, você receberá uma <strong>notificação</strong></li>
+                                    <li>O valor ficará em <strong>escrow</strong> até a confirmação da entrega</li>
+                                    <li>Para produtos físicos, <strong>registre o código de rastreio</strong> no sistema</li>
+                                    <li>Para produtos digitais, <strong>envie a chave de ativação ou link de download</strong></li>
+                                    <li>Quando a entrega for confirmada, os fundos serão <strong>liberados automaticamente</strong></li>
+                                </ol>
+                                
+                                <div class="warning-box">
+                                    <p><strong>Importante:</strong> Registre o código de rastreio correto e a transportadora para garantir a verificação automática da entrega.</p>
+                                </div>
+                            </section>
+                        </section>
+                        
+                        <section id="user-verification">
+                            <h2>Verificação de Entrega</h2>
+                            
+                            <section id="user-physical">
+                                <h3>Produtos Físicos</h3>
+                                <ol>
+                                    <li>O vendedor registra o <strong>código de rastreio</strong> e a <strong>transportadora</strong></li>
+                                    <li>O sistema monitora automaticamente o status da entrega</li>
+                                    <li>Quando a entrega é confirmada, os fundos são liberados para o vendedor</li>
+                                    <li>Alternativamente, o entregador pode escanear um <strong>QR code de confirmação</strong> no momento da entrega</li>
+                                </ol>
+                                
+                                <div class="info-box">
+                                    <p><strong>Transportadoras suportadas:</strong> Correios, DHL, UPS, FedEx, entre outras.</p>
+                                </div>
+                            </section>
+                            
+                            <section id="user-digital">
+                                <h3>Produtos Digitais</h3>
+                                <ol>
+                                    <li>O vendedor envia a <strong>chave de ativação</strong> ou <strong>link de download</strong> via plataforma</li>
+                                    <li>O comprador confirma o recebimento clicando em <strong>"Confirmar Recebimento"</strong></li>
+                                    <li>Se o comprador não confirmar em 7 dias, o sistema confirma automaticamente</li>
+                                    <li>Para produtos que exigem prova de abertura, o sistema registra uma <strong>prova criptográfica</strong> no IPFS</li>
+                                </ol>
+                                
+                                <div class="tip-box">
+                                    <p><strong>Dica para vendedores:</strong> Forneça instruções claras sobre como utilizar o produto digital para evitar disputas.</p>
+                                </div>
+                            </section>
+                        </section>
+                        
+                        <section id="user-fees">
+                            <h2>Sistema de Taxas</h2>
+                            <p>O PayByt cobra uma taxa fixa de <strong>1% sobre o valor da transação</strong>. Esta taxa é transparente e é exibida durante o checkout.</p>
+                            
+                            <h3>Composição da Taxa</h3>
+                            <ul>
+                                <li><strong>Taxa da Plataforma</strong>: 1% do valor da transação</li>
+                                <li><strong>Taxa de Rede</strong>: Varia conforme o método de pagamento
+                                    <ul>
+                                        <li>Lightning Network: Aproximadamente 0.1% (muito baixa)</li>
+                                        <li>Bitcoin on-chain: Varia conforme o congestionamento da rede</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            
+                            <h3>Exemplo de Cálculo</h3>
+                            <p>Para uma compra de 0.01 BTC:</p>
+                            <ul>
+                                <li>Taxa da Plataforma (1%): 0.0001 BTC</li>
+                                <li>Taxa de Rede Lightning (aproximada): 0.00001 BTC</li>
+                                <li>Total de Taxas: 0.00011 BTC</li>
+                                <li>Valor Total: 0.01011 BTC</li>
+                            </ul>
+                        </section>
+                        
+                        <section id="user-faq">
+                            <h2>Perguntas Frequentes</h2>
+                            
+                            <h3>Como criar uma carteira Lightning Network?</h3>
+                            <p>Recomendamos as seguintes carteiras Lightning Network:</p>
+                            <ul>
+                                <li><a href="https://www.walletofsatoshi.com/" target="_blank">Wallet of Satoshi</a> (mais fácil para iniciantes)</li>
+                                <li><a href="https://phoenix.acinq.co/" target="_blank">Phoenix</a> (boa segurança e facilidade de uso)</li>
+                                <li><a href="https://muun.com/" target="_blank">Muun</a> (suporta tanto Bitcoin on-chain quanto Lightning)</li>
+                                <li><a href="https://breez.technology/" target="_blank">Breez</a> (recursos avançados)</li>
+                            </ul>
+                            
+                            <h3>O que fazer se o pagamento Lightning falhar?</h3>
+                            <ol>
+                                <li>Verifique sua conexão com a internet</li>
+                                <li>Certifique-se de que sua carteira tem saldo suficiente</li>
+                                <li>Tente novamente ou escolha "Gerar Nova Fatura"</li>
+                                <li>Se o problema persistir, tente usar outra carteira Lightning</li>
+                            </ol>
+                            
+                            <h3>Como saber se meu pagamento foi confirmado?</h3>
+                            <p>A página de checkout será atualizada automaticamente quando o pagamento for confirmado. Você também receberá uma notificação por e-mail.</p>
+                            
+                            <h3>Como funciona a verificação de entrega?</h3>
+                            <p>Para produtos físicos, o sistema monitora automaticamente o código de rastreio. Para produtos digitais, o comprador confirma o recebimento ou o sistema confirma automaticamente após 7 dias.</p>
+                            
+                            <h3>O que acontece se a entrega não for confirmada?</h3>
+                            <p>Se houver problemas com a entrega, o comprador pode abrir uma disputa. Um mediador analisará o caso e decidirá se os fundos devem ser liberados para o vendedor ou devolvidos ao comprador.</p>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Guia de Instalação -->
+            <div id="doc-install" class="tab-content">
+                <div class="doc-content">
+                    <div class="sidebar">
+                        <ul>
+                            <li><a onclick="scrollToElement('install-intro')">Introdução</a></li>
+                            <li><a onclick="scrollToElement('install-prereq')">Pré-requisitos</a></li>
+                            <li><a onclick="scrollToElement('install-steps')">Instalação</a>
+                                <ul>
+                                    <li><a onclick="scrollToElement('install-clone')">1. Clone do Repositório</a></li>
+                                    <li><a onclick="scrollToElement('install-deps')">2. Instalação de Dependências</a></li>
+                                    <li><a onclick="scrollToElement('install-env')">3. Configuração de Variáveis</a></li>
+                                    <li><a onclick="scrollToElement('install-integration')">4. Integração ao Projeto</a></li>
+                                    <li><a onclick="scrollToElement('install-btcpay')">5. Configuração do BTCPay Server</a></li>
+                                </ul>
+                            </li>
+                            <li><a onclick="scrollToElement('install-execution')">Executando o Projeto</a></li>
+                            <li><a onclick="scrollToElement('install-testing')">Testando a Instalação</a></li>
+                            <li><a onclick="scrollToElement('install-troubleshooting')">Solução de Problemas</a></li>
+                        </ul>
+                    </div>
+                    <div class="main-doc-content">
+                        <h1 style="color: var(--primary-color); margin-bottom: 20px;">Guia de Instalação - Integração Lightning Network</h1>
+                        
+                        <section id="install-intro">
+                            <h2>Introdução</h2>
+                            <p>Este guia fornece instruções detalhadas para instalar e configurar a integração Lightning Network para o marketplace PayByt, incluindo o sistema de oráculos para verificação de entrega e o sistema de taxas da plataforma.</p>
+                        </section>
+                        
+                        <section id="install-prereq">
+                            <h2>Pré-requisitos</h2>
+                            <p>Antes de começar, certifique-se de ter instalado:</p>
+                            <ul>
+                                <li>Node.js (versão 14.0.0 ou superior)</li>
+                                <li>npm (versão 6.0.0 ou superior) ou yarn (versão 1.22.0 ou superior)</li>
+                                <li>Git</li>
+                            </ul>
+                            
+                            <p>Você também precisará de:</p>
+                            <ul>
+                                <li>Conta no BTCPay Server ou OpenNode para processamento de pagamentos Lightning</li>
+                                <li>Acesso a um nó Lightning Network (opcional, mas recomendado para ambiente de produção)</li>
+                                <li>Conta no Infura ou outro provedor IPFS (para armazenamento de provas)</li>
+                                <li>Conta no Chainlink (para oráculos)</li>
+                            </ul>
+                        </section>
+                        
+                        <section id="install-steps">
+                            <h2>Instalação</h2>
+                            
+                            <section id="install-clone">
+                                <h3>1. Clone o Repositório</h3>
+                                <pre>git clone https://github.com/Daniellobo989/paybytmvp.git
+cd paybytmvp</pre>
+                            </section>
+                            
+                            <section id="install-deps">
+                                <h3>2. Instale as Dependências</h3>
+                                <p>Usando npm:</p>
+                                <pre>npm install</pre>
+                                
+                                <p>Ou usando yarn:</p>
+                                <pre>yarn install</pre>
+                            </section>
+                            
+                            <section id="install-env">
+                                <h3>3. Configure as Variáveis de Ambiente</h3>
+                                <p>Crie um arquivo <code>.env</code> na raiz do projeto:</p>
+                                <pre>cp .env.example .env</pre>
+                                
+                                <p>Edite o arquivo <code>.env</code> com suas credenciais:</p>
+                                <pre># Configuração do Servidor
+PORT=3000
+NODE_ENV=development
+
+# BTCPay Server
+BTCPAY_SERVER_URL=https://seu-servidor-btcpay.com
+BTCPAY_API_KEY=sua-api-key
+BTCPAY_STORE_ID=seu-store-id
+
+# OpenNode (opcional)
+OPENNODE_API_URL=https://api.opennode.com
+OPENNODE_API_KEY=sua-api-key
+
+# IPFS
+IPFS_API_URL=https://ipfs.infura.io:5001/api/v0
+IPFS_GATEWAY_URL=https://ipfs.io/ipfs
+IPFS_API_KEY=sua-api-key
+
+# Chainlink
+CHAINLINK_NODE_URL=https://seu-node-chainlink.com
+CHAINLINK_JOB_ID=seu-job-id
+CHAINLINK_ORACLE_ADDRESS=seu-oracle-address
+CHAINLINK_API_KEY=sua-api-key</pre>
+                            </section>
+                            
+                            <section id="install-integration">
+                                <h3>4. Integre os Componentes ao Projeto Existente</h3>
+                                
+                                <h4>Copie os Arquivos de Serviço</h4>
+                                <pre>cp -r paybyt-lightning/src/services/* paybyt-interactive/src/services/</pre>
+                                
+                                <h4>Copie os Controladores e Rotas</h4>
+                                <pre>cp -r paybyt-lightning/src/controllers/* paybyt-interactive/src/controllers/
+cp -r paybyt-lightning/src/routes/* paybyt-interactive/src/routes/</pre>
+                                
+                                <h4>Copie os Componentes de Interface</h4>
+                                <pre>cp -r paybyt-lightning/src/components/lightning/* paybyt-interactive/src/components/lightning/</pre>
+                            </section>
+                            
+                            <section id="install-btcpay">
+                                <h3>5. Configure o BTCPay Server</h3>
+                                <ol>
+                                    <li>Acesse o painel de administração do BTCPay Server</li>
+                                    <li>Crie uma nova loja ou use uma existente</li>
+                                    <li>Ative o Lightning Network nas configurações da loja</li>
+                                    <li>Gere uma API Key com permissões para gerenciar faturas</li>
+                                    <li>Copie o Store ID e a API Key para o arquivo <code>.env</code></li>
+                                </ol>
+                                
+                                <div class="tip-box">
+                                    <p><strong>Dica:</strong> Para ambiente de desenvolvimento, você pode usar o BTCPay Server Testnet em <a href="https://testnet.demo.btcpayserver.org/" target="_blank">https://testnet.demo.btcpayserver.org/</a>.</p>
+                                </div>
+                            </section>
+                        </section>
+                        
+                        <section id="install-execution">
+                            <h2>Executando o Projeto</h2>
+                            
+                            <h3>Ambiente de Desenvolvimento</h3>
+                            <pre>npm run dev</pre>
+                            
+                            <p>Ou usando yarn:</p>
+                            <pre>yarn dev</pre>
+                            
+                            <p>O servidor será iniciado na porta especificada no arquivo <code>.env</code> (padrão: 3000).</p>
+                        </section>
+                        
+                        <section id="install-testing">
+                            <h2>Testando a Instalação</h2>
+                            
+                            <h3>Executar Testes Unitários</h3>
+                            <pre>npm test</pre>
+                            
+                            <p>Ou usando yarn:</p>
+                            <pre>yarn test</pre>
+                            
+                            <h3>Testar Manualmente</h3>
+                            <ol>
+                                <li>Acesse <code>http://localhost:3000</code> (ou a URL do seu servidor)</li>
+                                <li>Navegue até um produto</li>
+                                <li>Escolha "Pagar com Lightning Network" no checkout</li>
+                                <li>Verifique se a fatura Lightning é gerada corretamente</li>
+                                <li>Teste o pagamento usando uma carteira Lightning de teste</li>
+                            </ol>
+                        </section>
+                        
+                        <section id="install-troubleshooting">
+                            <h2>Solução de Problemas</h2>
+                            
+                            <h3>Erro de Conexão com BTCPay Server</h3>
+                            <p>Verifique se:</p>
+                            <ul>
+                                <li>A URL do BTCPay Server está correta</li>
+                                <li>A API Key tem permissões suficientes</li>
+                                <li>O Store ID está correto</li>
+                            </ul>
+                            
+                            <h3>Erro ao Gerar Fatura Lightning</h3>
+                            <p>Verifique se:</p>
+                            <ul>
+                                <li>O nó Lightning do BTCPay Server está ativo e com canais abertos</li>
+                                <li>A configuração do Lightning Network está correta na loja</li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Conteúdo da aba Demo Pagamento -->
+        <div id="payment-demo" class="main-content">
+            <h1 style="color: var(--primary-color); margin-bottom: 20px;">Demonstração de Pagamento Lightning Network</h1>
+            
+            <p>Esta é uma demonstração interativa de como funciona o pagamento via Lightning Network no marketplace PayByt. Você pode gerar um QR code de pagamento Lightning Network simulado e ver como seria a experiência do usuário.</p>
+            
+            <div class="info-box">
+                <p><strong>Nota:</strong> Esta é uma demonstração simulada. Nenhum pagamento real será processado.</p>
+            </div>
+            
+            <h2>Gerar QR Code de Pagamento</h2>
+            
+            <form id="payment-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="amount">Valor (BTC)</label>
+                        <input type="number" id="amount" step="0.00000001" min="0.00000001" value="0.001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Descrição</label>
+                        <input type="text" id="description" value="Compra no marketplace PayByt" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gateway">Gateway de Pagamento</label>
+                        <select id="gateway">
+                            <option value="btcpay">BTCPay Server</option>
+                            <option value="opennode">OpenNode</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="expiry">Expiração (minutos)</label>
+                        <input type="number" id="expiry" min="1" max="60" value="15" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn">Gerar QR Code</button>
+            </form>
+            
+            <div id="qr-container" class="qr-container" style="display: none;">
+                <h3>QR Code de Pagamento Lightning Network</h3>
+                <div id="qr-code" class="qr-code"></div>
+                
+                <div class="payment-details">
+                    <h3>Detalhes do Pagamento</h3>
+                    <p><span class="label">Valor:</span> <span id="payment-amount" class="value"></span> BTC</p>
+                    <p><span class="label">Taxa da Plataforma (1%):</span> <span id="payment-fee" class="value"></span> BTC</p>
+                    <p><span class="label">Total:</span> <span id="payment-total" class="value"></span> BTC</p>
+                    <p>
+                        <span class="label">Invoice Lightning:</span> 
+                        <span id="payment-invoice" class="value"></span>
+                        <button id="copy-invoice" class="copy-btn">Copiar</button>
+                    </p>
+                    
+                    <div id="payment-status" class="status pending">Aguardando Pagamento</div>
+                    <div id="payment-timer" class="timer">Expira em: 15:00</div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <button id="btn-pay" class="btn">Simular Pagamento</button>
+                    <button id="btn-cancel" class="btn" style="background-color: var(--danger-color); margin-left: 10px;">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Conteúdo da aba Demo Oráculos -->
+        <div id="oracle-demo" class="main-content">
+            <h1 style="color: var(--primary-color); margin-bottom: 20px;">Demonstração de Oráculos Blockchain para Verificação de Entregas</h1>
+            
+            <p>Esta é uma demonstração interativa do sistema de oráculos blockchain para verificação automática de entregas no marketplace PayByt. Você pode simular o rastreamento de produtos físicos e a verificação de entrega de produtos digitais.</p>
+            
+            <div class="info-box">
+                <p><strong>Nota:</strong> Esta é uma demonstração simulada. Nenhuma transação real será registrada no blockchain.</p>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="physical">Produtos Físicos</div>
+                <div class="tab" data-tab="digital">Produtos Digitais</div>
+            </div>
+            
+            <!-- Tab de Produtos Físicos -->
+            <div id="physical-tab" class="tab-content active">
+                <h2>Verificação de Entrega para Produtos Físicos</h2>
+                
+                <p>O sistema de oráculos monitora automaticamente o status de entrega de produtos físicos através de códigos de rastreio. Quando a entrega é confirmada, o oráculo envia um sinal para o smart contract, que libera os fundos para o vendedor.</p>
+                
+                <form id="tracking-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tracking-code">Código de Rastreio</label>
+                            <input type="text" id="tracking-code" placeholder="Ex: BR123456789BR" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="carrier">Transportadora</label>
+                            <select id="carrier" required>
+                                <option value="correios">Correios</option>
+                                <option value="dhl">DHL</option>
+                                <option value="fedex">FedEx</option>
+                                <option value="ups">UPS</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn">Verificar Entrega</button>
+                </form>
+                
+                <div id="tracking-container" class="tracking-container" style="display: none;">
+                    <div class="tracking-header">
+                        <h3>Status de Entrega</h3>
+                        <button id="refresh-tracking" class="btn" style="background-color: var(--secondary-color);">Atualizar Status</button>
+                    </div>
+                    
+                    <div class="tracking-details">
+                        <p><strong>Código de Rastreio:</strong> <span id="tracking-code-display"></span></p>
+                        <p><strong>Transportadora:</strong> <span id="carrier-display"></span></p>
+                        <p><strong>Data de Envio:</strong> <span id="shipping-date"></span></p>
+                        <p><strong>Previsão de Entrega:</strong> <span id="delivery-estimate"></span></p>
+                        
+                        <div id="tracking-status" class="tracking-status pending">Aguardando Atualização</div>
+                        
+                        <div class="tracking-timeline" id="tracking-timeline">
+                            <!-- Timeline items serão adicionados via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div id="blockchain-verification" class="blockchain-verification" style="display: none;">
+                        <h3>Verificação Blockchain</h3>
+                        <p>A entrega foi verificada pelo sistema de oráculos e registrada no blockchain.</p>
+                        
+                        <div class="verification-details">
+                            <div class="verification-item">
+                                <div class="verification-label">Oráculo:</div>
+                                <div class="verification-value">Chainlink Delivery Verification Oracle</div>
+                            </div>
+                            <div class="verification-item">
+                                <div class="verification-label">Contrato:</div>
+                                <div class="verification-value">0x7F5EB5bB5cF88cfcEe9613368636f458800e62CB</div>
+                            </div>
+                            <div class="verification-item">
+                                <div class="verification-label">Transação:</div>
+                                <div class="verification-value" id="tx-hash">0x0000000000000000000000000000000000000000000000000000000000000000</div>
+                            </div>
+                            <div class="verification-item">
+                                <div class="verification-label">Timestamp:</div>
+                                <div class="verification-value" id="tx-timestamp">-</div>
+                            </div>
+                            <div class="verification-item">
+                                <div class="verification-label">Status:</div>
+                                <div class="verification-value" id="tx-status">Pendente</div>
+                            </div>
+                        </div>
+                        
+                        <div class="qr-container">
+                            <h4>QR Code de Confirmação de Entrega</h4>
+                            <p>Este QR code pode ser escaneado pelo entregador no momento da entrega para confirmar automaticamente.</p>
+                            <div id="qr-code-delivery" class="qr-code"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab de Produtos Digitais -->
+            <div id="digital-tab" class="tab-content">
+                <h2>Verificação de Entrega para Produtos Digitais</h2>
+                
+                <p>Para produtos digitais, o sistema registra provas de entrega e abertura/leitura no IPFS, garantindo a imutabilidade das provas. Quando o comprador confirma o recebimento, o oráculo envia um sinal para o smart contract.</p>
+                
+                <form id="digital-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="product-id">ID do Produto</label>
+                            <input type="text" id="product-id" placeholder="Ex: software-123" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-name">Nome do Produto</label>
+                            <input type="text" id="product-name" placeholder="Ex: Software Premium" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activation-key">Chave de Ativação</label>
+                        <input type="text" id="activation-key" placeholder="Ex: XXXX-YYYY-ZZZZ-WWWW" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="download-link">Link de Download (opcional)</label>
+                        <input type="text" id="download-link" placeholder="Ex: https://exemplo.com/download">
+                    </div>
+                    
+                    <button type="submit" class="btn">Registrar Entrega Digital</button>
+                </form>
+                
+                <div id="digital-container" class="digital-delivery-container" style="display: none;">
+                    <div class="digital-product">
+                        <div class="digital-product-header">
+                            <div class="digital-product-title" id="digital-product-title">Software Premium</div>
+                            <div class="digital-product-status sent" id="digital-product-status">Enviado</div>
+                        </div>
+                        
+                        <div class="digital-product-details">
+                            <p><strong>ID do Produto:</strong> <span id="digital-product-id"></span></p>
+                            <p><strong>Data de Envio:</strong> <span id="digital-sending-date"></span></p>
+                            <p><strong>Chave de Ativação:</strong></p>
+                            <div class="digital-product-key" id="digital-product-key"></div>
+                            
+                            <p id="digital-download-container" style="display: none;"><strong>Link de Download:</strong> <a href="#" id="digital-download-link" target="_blank"></a></p>
+                        </div>
+                        
+                        <div id="digital-actions" style="margin-top: 20px;">
+                            <button id="confirm-receipt" class="btn">Confirmar Recebimento</button>
+                            <button id="register-proof" class="btn" style="background-color: var(--secondary-color); margin-left: 10px;">Registrar Prova de Abertura</button>
+                        </div>
+                        
+                        <div id="ipfs-proof" class="ipfs-proof" style="display: none;">
+                            <div class="ipfs-proof-header">
+                                <div class="ipfs-proof-title">Prova de Abertura/Leitura (IPFS)</div>
+                                <div class="ipfs-proof-date" id="ipfs-proof-date"></div>
+                            </div>
+                            <p>A prova de abertura/leitura foi registrada no IPFS e verificada pelo sistema de oráculos.</p>
+                            <div class="ipfs-hash" id="ipfs-hash"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="digital-blockchain-verification" class="blockchain-verification" style="display: none;">
+                        <h3>Verificação Blockchain</h3>
+                        <p>A entrega digital foi verificada pelo sistema de oráculos e registrada no blockchain.</p>
+                        
+                        <div class="verification-details">
+                            <div class="verification-item">
+                                <div class="verification-label">Oráculo:</div>
+                                <div class="verification-value">Chainlink Digital Delivery Oracle</div>
+                            </div>
+                            <div class="verification-item">
+                                <div class="verification-label">Contrato:</div>
+                                <div class="verification-value">0x8F6EB5bB5cF88cfcEe9613368636f458800e62CB</div>
+                            </div>
+                            <div class="verification-item">
+                                <div class="verification-label">Transação:</div>
+                                <div class="verification-value" id="digital-tx-hash">0x0000000000000000000000000000000000000000000000000000000000000000</div>
+                            </div>
+                            <div class="verification-item">
+                                <div class="verification-label">Timestamp:</div>
+                                <div class="verification-value" id="digital-tx-timestamp">-</div>
+                            </div>
+                            <div class="verification-item">
+                                <div class="verification-label">Status:</div>
+                                <div class="verification-value" id="digital-tx-status">Pendente</div>
+                            </div>
+                            <div class="verification-item">
+                                <div class="verification-label">Assinatura Digital:</div>
+                                <div class="verification-value" id="digital-signature">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container footer-content">
+            <p>© 2025 PayByt. Todos os direitos reservados.</p>
+            <p>Marketplace descentralizado com Bitcoin</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navegação entre abas principais
+            const mainTabs = document.querySelectorAll('.main-tab');
+            const mainContents = document.querySelectorAll('.main-content');
+            
+            mainTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    showTab(tabId);
+                });
+            });
+            
+            // Função para mostrar uma aba específica
+            window.showTab = function(tabId) {
+                // Remover classe active de todas as abas e conteúdos
+                mainTabs.forEach(t => t.classList.remove('active'));
+                mainContents.forEach(c => c.classList.remove('active'));
+                
+                // Adicionar classe active à aba clicada e ao conteúdo correspondente
+                document.querySelector(`.main-tab[data-tab="${tabId}"]`).classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            };
+            
+            // Navegação entre abas de documentação
+            const docTabs = document.querySelectorAll('.tab');
+            const docContents = document.querySelectorAll('.tab-content');
+            
+            docTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Remover classe active de todas as abas e conteúdos
+                    docTabs.forEach(t => t.classList.remove('active'));
+                    docContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Adicionar classe active à aba clicada e ao conteúdo correspondente
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Função para rolar até um elemento específico
+            window.scrollToElement = function(elementId) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+            
+            // Demo de Pagamento Lightning
+            const paymentForm = document.getElementById('payment-form');
+            const qrContainer = document.getElementById('qr-container');
+            const qrCodeElement = document.getElementById('qr-code');
+            const paymentAmount = document.getElementById('payment-amount');
+            const paymentFee = document.getElementById('payment-fee');
+            const paymentTotal = document.getElementById('payment-total');
+            const paymentInvoice = document.getElementById('payment-invoice');
+            const paymentStatus = document.getElementById('payment-status');
+            const paymentTimer = document.getElementById('payment-timer');
+            const btnPay = document.getElementById('btn-pay');
+            const btnCancel = document.getElementById('btn-cancel');
+            const copyInvoice = document.getElementById('copy-invoice');
+            
+            let timerInterval;
+            let expiryTime;
+            
+            // Gerar fatura Lightning simulada
+            function generateLightningInvoice(amount, description) {
+                // Simulação de uma fatura Lightning Network (BOLT11)
+                const prefix = 'lnbc';
+                const amountPart = Math.floor(amount * 100000000); // Converter para satoshis
+                const timestamp = Math.floor(Date.now() / 1000);
+                const randomPart = Array.from({length: 20}, () => Math.floor(Math.random() * 36).toString(36)).join('');
+                
+                return `${prefix}${amountPart}n1p${randomPart}dqdgqvpshjsmkd8kuk2z0fwxgrslv93jqjgntdp5908hmmm69unfvdknjqmn0wvhxcmmrdp5xys${timestamp}`;
+            }
+            
+            // Gerar QR code
+            function generateQRCode(text, element) {
+                element.innerHTML = '';
+                QRCode.toCanvas(element, text, {
+                    width: 250,
+                    margin: 1,
+                    color: {
+                        dark: '#000000',
+                        light: '#ffffff'
+                    }
+                }, function(error) {
+                    if (error) console.error(error);
+                });
+            }
+            
+            // Atualizar timer
+            function updateTimer() {
+                const now = new Date().getTime();
+                const distance = expiryTime - now;
+                
+                if (distance <= 0) {
+                    clearInterval(timerInterval);
+                    paymentStatus.className = 'status expired';
+                    paymentStatus.textContent = 'Fatura Expirada';
+                    paymentTimer.textContent = 'Expirado';
+                    btnPay.disabled = true;
+                    return;
+                }
+                
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                paymentTimer.textContent = `Expira em: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Iniciar timer
+            function startTimer(minutes) {
+                clearInterval(timerInterval);
+                expiryTime = new Date().getTime() + minutes * 60 * 1000;
+                updateTimer();
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+            
+            // Evento de submissão do formulário de pagamento
+            if (paymentForm) {
+                paymentForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const amount = parseFloat(document.getElementById('amount').value);
+                    const description = document.getElementById('description').value;
+                    const gateway = document.getElementById('gateway').value;
+                    const expiry = parseInt(document.getElementById('expiry').value);
+                    
+                    // Calcular taxa da plataforma (1%)
+                    const fee = amount * 0.01;
+                    const total = amount + fee;
+                    
+                    // Gerar fatura Lightning
+                    const invoice = generateLightningInvoice(total, description);
+                    
+                    // Atualizar detalhes do pagamento
+                    paymentAmount.textContent = amount.toFixed(8);
+                    paymentFee.textContent = fee.toFixed(8);
+                    paymentTotal.textContent = total.toFixed(8);
+                    paymentInvoice.textContent = invoice;
+                    
+                    // Gerar QR code
+                    generateQRCode(invoice, qrCodeElement);
+                    
+                    // Resetar status
+                    paymentStatus.className = 'status pending';
+                    paymentStatus.textContent = 'Aguardando Pagamento';
+                    btnPay.disabled = false;
+                    
+                    // Iniciar timer
+                    startTimer(expiry);
+                    
+                    // Mostrar container do QR code
+                    qrContainer.style.display = 'flex';
+                });
+            }
+            
+            // Evento de clique no botão de simular pagamento
+            if (btnPay) {
+                btnPay.addEventListener('click', function() {
+                    clearInterval(timerInterval);
+                    paymentStatus.className = 'status paid';
+                    paymentStatus.textContent = 'Pagamento Confirmado';
+                    paymentTimer.textContent = 'Pagamento processado com sucesso!';
+                    btnPay.disabled = true;
+                });
+            }
+            
+            // Evento de clique no botão de cancelar
+            if (btnCancel) {
+                btnCancel.addEventListener('click', function() {
+                    clearInterval(timerInterval);
+                    qrContainer.style.display = 'none';
+                });
+            }
+            
+            // Evento de clique no botão de copiar invoice
+            if (copyInvoice) {
+                copyInvoice.addEventListener('click', function() {
+                    const invoice = paymentInvoice.textContent;
+                    navigator.clipboard.writeText(invoice).then(function() {
+                        copyInvoice.textContent = 'Copiado!';
+                        setTimeout(function() {
+                            copyInvoice.textContent = 'Copiar';
+                        }, 2000);
+                    });
+                });
+            }
+            
+            // Demo de Oráculos - Produtos Físicos
+            const trackingForm = document.getElementById('tracking-form');
+            const trackingContainer = document.getElementById('tracking-container');
+            const trackingCodeDisplay = document.getElementById('tracking-code-display');
+            const carrierDisplay = document.getElementById('carrier-display');
+            const shippingDate = document.getElementById('shipping-date');
+            const deliveryEstimate = document.getElementById('delivery-estimate');
+            const trackingStatus = document.getElementById('tracking-status');
+            const trackingTimeline = document.getElementById('tracking-timeline');
+            const blockchainVerification = document.getElementById('blockchain-verification');
+            const refreshTracking = document.getElementById('refresh-tracking');
+            const txHash = document.getElementById('tx-hash');
+            const txTimestamp = document.getElementById('tx-timestamp');
+            const txStatus = document.getElementById('tx-status');
+            const qrCodeDelivery = document.getElementById('qr-code-delivery');
+            
+            // Formatar data
+            function formatDate(date) {
+                return date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+            
+            // Adicionar item à timeline
+            function addTimelineItem(date, location, status, isActive = false, isCompleted = false) {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = `timeline-item${isActive ? ' active' : ''}${isCompleted ? ' completed' : ''}`;
+                
+                const timelineDate = document.createElement('div');
+                timelineDate.className = 'timeline-date';
+                timelineDate.textContent = formatDate(date);
+                
+                const timelineContent = document.createElement('div');
+                timelineContent.className = 'timeline-content';
+                timelineContent.innerHTML = `<strong>${location}</strong><br>${status}`;
+                
+                timelineItem.appendChild(timelineDate);
+                timelineItem.appendChild(timelineContent);
+                
+                trackingTimeline.appendChild(timelineItem);
+            }
+            
+            // Simular rastreamento
+            function simulateTracking(trackingCode, carrier) {
+                // Limpar timeline
+                trackingTimeline.innerHTML = '';
+                
+                // Definir datas
+                const now = new Date();
+                const shippingDateValue = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000); // 3 dias atrás
+                const estimatedDelivery = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 dias à frente
+                
+                // Atualizar detalhes
+                trackingCodeDisplay.textContent = trackingCode;
+                carrierDisplay.textContent = carrier === 'correios' ? 'Correios' : 
+                                            carrier === 'dhl' ? 'DHL' : 
+                                            carrier === 'fedex' ? 'FedEx' : 'UPS';
+                shippingDate.textContent = formatDate(shippingDateValue);
+                deliveryEstimate.textContent = formatDate(estimatedDelivery);
+                
+                // Adicionar itens à timeline
+                addTimelineItem(
+                    shippingDateValue, 
+                    'Centro de Distribuição - São Paulo, SP', 
+                    'Objeto postado', 
+                    false, 
+                    true
+                );
+                
+                addTimelineItem(
+                    new Date(shippingDateValue.getTime() + 1 * 24 * 60 * 60 * 1000), 
+                    'Centro de Triagem - São Paulo, SP', 
+                    'Objeto em trânsito', 
+                    false, 
+                    true
+                );
+                
+                addTimelineItem(
+                    new Date(shippingDateValue.getTime() + 2 * 24 * 60 * 60 * 1000), 
+                    'Centro de Distribuição - Rio de Janeiro, RJ', 
+                    'Objeto em trânsito para a cidade de destino', 
+                    true, 
+                    false
+                );
+                
+                // Atualizar status
+                trackingStatus.className = 'tracking-status in-transit';
+                trackingStatus.textContent = 'Em Trânsito';
+                
+                // Mostrar container
+                trackingContainer.style.display = 'block';
+                blockchainVerification.style.display = 'none';
+                
+                // Gerar QR code para confirmação de entrega
+                generateQRCode(`PAYBYT-DELIVERY-${trackingCode}`, qrCodeDelivery);
+            }
+            
+            // Simular confirmação de entrega
+            function simulateDeliveryConfirmation() {
+                // Limpar timeline existente
+                const timelineItems = trackingTimeline.querySelectorAll('.timeline-item');
+                timelineItems.forEach(item => {
+                    item.classList.remove('active');
+                    item.classList.add('completed');
+                });
+                
+                // Adicionar item de entrega à timeline
+                const now = new Date();
+                addTimelineItem(
+                    now, 
+                    'Endereço de Entrega - Rio de Janeiro, RJ', 
+                    'Objeto entregue ao destinatário', 
+                    true, 
+                    false
+                );
+                
+                // Atualizar status
+                trackingStatus.className = 'tracking-status delivered';
+                trackingStatus.textContent = 'Entregue';
+                
+                // Gerar hash de transação aleatório
+                const hash = '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+                txHash.textContent = hash;
+                txTimestamp.textContent = formatDate(now);
+                txStatus.textContent = 'Confirmado';
+                
+                // Mostrar verificação blockchain
+                blockchainVerification.style.display = 'block';
+            }
+            
+            // Evento de submissão do formulário de rastreamento
+            if (trackingForm) {
+                trackingForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const trackingCode = document.getElementById('tracking-code').value;
+                    const carrier = document.getElementById('carrier').value;
+                    
+                    simulateTracking(trackingCode, carrier);
+                });
+            }
+            
+            // Evento de clique no botão de atualizar rastreamento
+            if (refreshTracking) {
+                refreshTracking.addEventListener('click', function() {
+                    // 50% de chance de confirmar a entrega
+                    if (Math.random() > 0.5) {
+                        simulateDeliveryConfirmation();
+                    } else {
+                        alert('Nenhuma atualização disponível no momento. Tente novamente mais tarde.');
+                    }
+                });
+            }
+            
+            // Demo de Oráculos - Produtos Digitais
+            const digitalForm = document.getElementById('digital-form');
+            const digitalContainer = document.getElementById('digital-container');
+            const digitalProductTitle = document.getElementById('digital-product-title');
+            const digitalProductId = document.getElementById('digital-product-id');
+            const digitalProductStatus = document.getElementById('digital-product-status');
+            const digitalSendingDate = document.getElementById('digital-sending-date');
+            const digitalProductKey = document.getElementById('digital-product-key');
+            const digitalDownloadContainer = document.getElementById('digital-download-container');
+            const digitalDownloadLink = document.getElementById('digital-download-link');
+            const confirmReceipt = document.getElementById('confirm-receipt');
+            const registerProof = document.getElementById('register-proof');
+            const ipfsProof = document.getElementById('ipfs-proof');
+            const ipfsProofDate = document.getElementById('ipfs-proof-date');
+            const ipfsHash = document.getElementById('ipfs-hash');
+            const digitalBlockchainVerification = document.getElementById('digital-blockchain-verification');
+            const digitalTxHash = document.getElementById('digital-tx-hash');
+            const digitalTxTimestamp = document.getElementById('digital-tx-timestamp');
+            const digitalTxStatus = document.getElementById('digital-tx-status');
+            const digitalSignature = document.getElementById('digital-signature');
+            
+            // Gerar hash IPFS aleatório
+            function generateRandomIPFSHash() {
+                return 'Qm' + Array.from({length: 44}, () => Math.floor(Math.random() * 36).toString(36)).join('');
+            }
+            
+            // Evento de submissão do formulário de entrega digital
+            if (digitalForm) {
+                digitalForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const productId = document.getElementById('product-id').value;
+                    const productName = document.getElementById('product-name').value;
+                    const activationKey = document.getElementById('activation-key').value;
+                    const downloadLink = document.getElementById('download-link').value;
+                    
+                    // Atualizar detalhes
+                    digitalProductTitle.textContent = productName;
+                    digitalProductId.textContent = productId;
+                    digitalSendingDate.textContent = formatDate(new Date());
+                    digitalProductKey.textContent = activationKey;
+                    
+                    // Verificar se há link de download
+                    if (downloadLink) {
+                        digitalDownloadLink.textContent = downloadLink;
+                        digitalDownloadLink.href = downloadLink;
+                        digitalDownloadContainer.style.display = 'block';
+                    } else {
+                        digitalDownloadContainer.style.display = 'none';
+                    }
+                    
+                    // Atualizar status
+                    digitalProductStatus.className = 'digital-product-status sent';
+                    digitalProductStatus.textContent = 'Enviado';
+                    
+                    // Mostrar container
+                    digitalContainer.style.display = 'block';
+                    ipfsProof.style.display = 'none';
+                    digitalBlockchainVerification.style.display = 'none';
+                });
+            }
+            
+            // Evento de clique no botão de confirmar recebimento
+            if (confirmReceipt) {
+                confirmReceipt.addEventListener('click', function() {
+                    // Atualizar status
+                    digitalProductStatus.className = 'digital-product-status confirmed';
+                    digitalProductStatus.textContent = 'Confirmado';
+                    
+                    // Gerar hash de transação aleatório
+                    const now = new Date();
+                    const hash = '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+                    digitalTxHash.textContent = hash;
+                    digitalTxTimestamp.textContent = formatDate(now);
+                    digitalTxStatus.textContent = 'Confirmado';
+                    digitalSignature.textContent = '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+                    
+                    // Mostrar verificação blockchain
+                    digitalBlockchainVerification.style.display = 'block';
+                    
+                    // Desabilitar botões
+                    confirmReceipt.disabled = true;
+                    registerProof.disabled = true;
+                });
+            }
+            
+            // Evento de clique no botão de registrar prova de abertura
+            if (registerProof) {
+                registerProof.addEventListener('click', function() {
+                    // Atualizar status
+                    digitalProductStatus.className = 'digital-product-status received';
+                    digitalProductStatus.textContent = 'Recebido';
+                    
+                    // Gerar hash IPFS aleatório
+                    const now = new Date();
+                    const hash = generateRandomIPFSHash();
+                    ipfsHash.textContent = hash;
+                    ipfsProofDate.textContent = formatDate(now);
+                    
+                    // Mostrar prova IPFS
+                    ipfsProof.style.display = 'block';
+                    
+                    // Desabilitar botão de registrar prova
+                    registerProof.disabled = true;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

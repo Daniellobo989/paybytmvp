@@ -1,164 +1,452 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PayByt - Marketplace Descentralizado com Bitcoin</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      margin: 0;
-      padding: 0;
-      color: #333;
-      background-color: #f5f5f5;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    header {
-      background-color: #002D72;
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-    }
-    .logo {
-      max-width: 300px;
-      margin-bottom: 10px;
-    }
-    .hero {
-      background-color: #f0f0f0;
-      padding: 50px 20px;
-      text-align: center;
-    }
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin: 40px 0;
-    }
-    .feature {
-      flex-basis: 30%;
-      background: white;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .bitcoin-accent {
-      color: #F7931A;
-    }
-    .cta-button {
-      display: inline-block;
-      background-color: #F7931A;
-      color: white;
-      padding: 12px 30px;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-      margin-top: 20px;
-      transition: background-color 0.3s;
-    }
-    .cta-button:hover {
-      background-color: #e67e00;
-    }
-    footer {
-      background-color: #002D72;
-      color: white;
-      text-align: center;
-      padding: 20px 0;
-      margin-top: 40px;
-    }
-    @media (max-width: 768px) {
-      .feature {
-        flex-basis: 100%;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayByt - Integração Lightning Network</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #f8b400;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), #0d47a1);
+            color: #fff;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .features {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .section-title p {
+            color: #777;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+        
+        .documentation {
+            padding: 60px 0;
+            background-color: #fff;
+        }
+        
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .doc-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            transition: box-shadow 0.3s;
+        }
+        
+        .doc-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .doc-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .doc-card p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .architecture {
+            padding: 60px 0;
+        }
+        
+        .arch-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .arch-description {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .arch-description h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .tech-stack {
+            padding: 60px 0;
+            background-color: #fff;
+        }
+        
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .tech-item {
+            background-color: var(--light-color);
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .social-links a {
+            color: #fff;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .feature-grid, .doc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <img src="https://raw.githubusercontent.com/Daniellobo989/paybytmvp/main/public/logo.png" alt="PayByt Logo" class="logo">
-      <h1>PayByt</h1>
-    </div>
-  </header>
-  
-  <section class="hero">
-    <div class="container">
-      <h1>Bem-vindo ao <span class="bitcoin-accent">PayByt</span></h1>
-      <h2>Marketplace Descentralizado com Bitcoin</h2>
-      <p>Compre e venda com segurança usando apenas Bitcoin como forma de pagamento.</p>
-      <a href="#features" class="cta-button">Conheça as Funcionalidades</a>
-    </div>
-  </section>
-  
-  <div class="container" id="features">
-    <h2 style="text-align: center; margin: 40px 0;">Funcionalidades Principais</h2>
-    <div class="features">
-      <div class="feature">
-        <h3><span class="bitcoin-accent">✓</span> Autenticação Anônima</h3>
-        <p>Registre-se e faça login sem fornecer informações pessoais identificáveis, garantindo sua privacidade.</p>
-      </div>
-      <div class="feature">
-        <h3><span class="bitcoin-accent">✓</span> Escrow Multisig</h3>
-        <p>Transações seguras com contratos multisig 2-de-3 para proteção de compradores e vendedores.</p>
-      </div>
-      <div class="feature">
-        <h3><span class="bitcoin-accent">✓</span> Pagamentos em Bitcoin</h3>
-        <p>Suporte para transações on-chain e Lightning Network para pagamentos rápidos e com baixas taxas.</p>
-      </div>
-      <div class="feature">
-        <h3><span class="bitcoin-accent">✓</span> Chat Criptografado</h3>
-        <p>Comunicação segura entre compradores e vendedores para negociação de detalhes.</p>
-      </div>
-      <div class="feature">
-        <h3><span class="bitcoin-accent">✓</span> Resolução de Disputas</h3>
-        <p>Sistema de mediação imparcial quando necessário para resolver conflitos entre as partes.</p>
-      </div>
-      <div class="feature">
-        <h3><span class="bitcoin-accent">✓</span> Privacidade e Segurança</h3>
-        <p>Projetado para oferecer máxima privacidade e segurança em todas as transações.</p>
-      </div>
-    </div>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="logo.png" alt="PayByt Logo">
+                <h1>PayByt</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#features">Recursos</a></li>
+                    <li><a href="#documentation">Documentação</a></li>
+                    <li><a href="#architecture">Arquitetura</a></li>
+                    <li><a href="#tech-stack">Tecnologias</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
     
-    <div style="text-align: center; margin: 60px 0; padding: 30px; background-color: #f9f9f9; border-radius: 10px;">
-      <h2>Versão MVP em Desenvolvimento</h2>
-      <p>O PayByt está atualmente em fase de desenvolvimento. Esta página é uma prévia do marketplace descentralizado que estamos construindo.</p>
-      <p>Em breve, você poderá comprar e vender produtos e serviços usando exclusivamente Bitcoin como forma de pagamento, com todas as vantagens de um sistema descentralizado.</p>
-      <a href="#" class="cta-button">Inscreva-se para Atualizações</a>
-    </div>
+    <section class="hero">
+        <div class="container">
+            <h2>Integração Lightning Network</h2>
+            <p>Pagamentos rápidos e de baixo custo com Bitcoin Lightning Network, sistema de oráculos para verificação de entrega e sistema de taxas transparente para o marketplace PayByt.</p>
+            <a href="#documentation" class="btn">Ver Documentação</a>
+        </div>
+    </section>
     
-    <div style="text-align: center; margin: 40px 0;">
-      <h2>Por que escolher o PayByt?</h2>
-      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-top: 30px;">
-        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-          <h3>Sem Intermediários</h3>
-          <p>Transações diretas entre compradores e vendedores, sem taxas de intermediários.</p>
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Recursos Principais</h2>
+                <p>Conheça os principais recursos da integração Lightning Network para o PayByt</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Pagamentos Lightning Network</h3>
+                    <p>Transações instantâneas e com taxas extremamente baixas usando a Lightning Network do Bitcoin. Suporte a múltiplos gateways (BTCPay Server e OpenNode) e interface intuitiva para usuários.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Sistema de Oráculos</h3>
+                    <p>Verificação automática de entrega para produtos físicos e digitais. Monitoramento de códigos de rastreio, provas criptográficas de entrega e integração com Chainlink para confirmações no blockchain.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Sistema de Taxas</h3>
+                    <p>Taxa fixa de 1% da plataforma, com distribuição transparente entre operações, desenvolvimento, segurança e comunidade. Estimativa precisa de taxas de rede e relatórios detalhados.</p>
+                </div>
+            </div>
         </div>
-        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-          <h3>Proteção de Fundos</h3>
-          <p>Sistema de escrow multisig garante que o dinheiro só é liberado quando ambas as partes estão satisfeitas.</p>
+    </section>
+    
+    <section id="documentation" class="documentation">
+        <div class="container">
+            <div class="section-title">
+                <h2>Documentação</h2>
+                <p>Documentação completa para entender, utilizar e manter a integração Lightning Network</p>
+            </div>
+            <div class="doc-grid">
+                <div class="doc-card">
+                    <h3>Documentação Técnica</h3>
+                    <p>Descrição detalhada da arquitetura, componentes, APIs e aspectos técnicos da implementação. Ideal para desenvolvedores e equipe técnica.</p>
+                    <a href="documentacao_tecnica.html" class="btn">Ver Documentação Técnica</a>
+                </div>
+                <div class="doc-card">
+                    <h3>Manual do Usuário</h3>
+                    <p>Guia completo para compradores e vendedores sobre como utilizar os recursos de pagamento Lightning Network, verificação de entrega e sistema de taxas.</p>
+                    <a href="manual_usuario.html" class="btn">Ver Manual do Usuário</a>
+                </div>
+                <div class="doc-card">
+                    <h3>Guia de Instalação</h3>
+                    <p>Instruções detalhadas para instalar e configurar a integração Lightning Network, incluindo pré-requisitos, configuração de ambiente e solução de problemas.</p>
+                    <a href="guia_instalacao.html" class="btn">Ver Guia de Instalação</a>
+                </div>
+            </div>
         </div>
-        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-          <h3>Anonimato</h3>
-          <p>Compre e venda sem revelar sua identidade, mantendo sua privacidade.</p>
+    </section>
+    
+    <section id="architecture" class="architecture">
+        <div class="container">
+            <div class="section-title">
+                <h2>Arquitetura</h2>
+                <p>Visão geral da arquitetura da integração Lightning Network</p>
+            </div>
+            <div class="arch-description">
+                <h3>Arquitetura Modular</h3>
+                <p>A arquitetura da solução segue um design modular, com três componentes principais:</p>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Integração Lightning Network</strong>: Gerencia pagamentos via Lightning Network</li>
+                    <li><strong>Sistema de Oráculos</strong>: Verifica automaticamente a entrega de produtos</li>
+                    <li><strong>Sistema de Taxas</strong>: Gerencia a taxa de 1% da plataforma</li>
+                </ul>
+                
+                <h3>Fluxos de Pagamento</h3>
+                <p><strong>Pagamento via Lightning Network:</strong></p>
+                <ol style="margin-left: 20px; margin-bottom: 20px;">
+                    <li>Usuário seleciona produto e escolhe Lightning Network como método de pagamento</li>
+                    <li>Sistema calcula valor total incluindo taxa da plataforma (1%)</li>
+                    <li>Serviço cria fatura Lightning via BTCPay Server ou OpenNode</li>
+                    <li>Usuário paga usando carteira Lightning Network</li>
+                    <li>Gateway notifica sistema via webhook quando pagamento é recebido</li>
+                    <li>Sistema atualiza status da transação e registra taxa da plataforma</li>
+                </ol>
+                
+                <p><strong>Verificação de Entrega:</strong></p>
+                <ol style="margin-left: 20px; margin-bottom: 20px;">
+                    <li>Vendedor registra código de rastreio ou envia produto digital</li>
+                    <li>Sistema monitora status de entrega periodicamente</li>
+                    <li>Quando entrega é confirmada, oráculo envia sinal para smart contract</li>
+                    <li>Smart contract libera fundos automaticamente para o vendedor</li>
+                </ol>
+            </div>
         </div>
-        <div style="flex-basis: 48%; background: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-          <h3>Resistente à Censura</h3>
-          <p>Sistema descentralizado que não pode ser censurado ou controlado por governos ou corporações.</p>
+    </section>
+    
+    <section id="tech-stack" class="tech-stack">
+        <div class="container">
+            <div class="section-title">
+                <h2>Tecnologias Utilizadas</h2>
+                <p>Stack tecnológico da integração Lightning Network</p>
+            </div>
+            <div class="tech-list">
+                <div class="tech-item">React.js</div>
+                <div class="tech-item">TypeScript</div>
+                <div class="tech-item">Node.js</div>
+                <div class="tech-item">Express.js</div>
+                <div class="tech-item">BTCPay Server</div>
+                <div class="tech-item">OpenNode</div>
+                <div class="tech-item">Chainlink</div>
+                <div class="tech-item">IPFS</div>
+                <div class="tech-item">Solidity</div>
+                <div class="tech-item">MongoDB</div>
+                <div class="tech-item">Jest</div>
+                <div class="tech-item">Tailwind CSS</div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-  
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 PayByt - Todos os direitos reservados</p>
-      <p>O marketplace descentralizado com Bitcoin como única forma de pagamento</p>
-    </div>
-  </footer>
+    </section>
+    
+    <footer>
+        <div class="container footer-content">
+            <p>© 2025 PayByt. Todos os direitos reservados.</p>
+            <div class="social-links">
+                <a href="#"><span>GitHub</span></a>
+                <a href="#"><span>Twitter</span></a>
+                <a href="#"><span>Telegram</span></a>
+            </div>
+            <p>Marketplace descentralizado com Bitcoin</p>
+        </div>
+    </footer>
 </body>
 </html>

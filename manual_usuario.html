@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayByt - Manual do Usuário</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #f8b400;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .content {
+            padding: 40px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        
+        .doc-content {
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 250px;
+            padding-right: 20px;
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .sidebar ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .sidebar ul li ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding-left: 20px;
+            border-left: 1px solid #ddd;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        h3 {
+            color: var(--dark-color);
+            margin: 25px 0 15px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .info-box {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning-box {
+            background-color: #fff8e1;
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .tip-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .image-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+            }
+            
+            .doc-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                padding-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .main-content {
+                padding-left: 0;
+                border-left: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="logo.png" alt="PayByt Logo">
+                <h1>PayByt</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="documentacao_tecnica.html">Documentação Técnica</a></li>
+                    <li><a href="manual_usuario.html">Manual do Usuário</a></li>
+                    <li><a href="guia_instalacao.html">Guia de Instalação</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container content">
+        <div class="doc-content">
+            <div class="sidebar">
+                <ul>
+                    <li><a href="#introducao">Introdução</a></li>
+                    <li><a href="#lightning-network">O que é Lightning Network?</a></li>
+                    <li><a href="#recursos">Recursos Principais</a></li>
+                    <li><a href="#pagamentos">Como Realizar um Pagamento</a>
+                        <ul>
+                            <li><a href="#compradores">Para Compradores</a></li>
+                            <li><a href="#vendedores">Para Vendedores</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#verificacao">Verificação de Entrega</a>
+                        <ul>
+                            <li><a href="#produtos-fisicos">Produtos Físicos</a></li>
+                            <li><a href="#produtos-digitais">Produtos Digitais</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#taxas">Sistema de Taxas</a></li>
+                    <li><a href="#faq">Perguntas Frequentes</a></li>
+                    <li><a href="#suporte">Suporte</a></li>
+                    <li><a href="#glossario">Glossário</a></li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <h1 style="color: var(--primary-color); margin-bottom: 20px;">Manual do Usuário - Integração Lightning Network PayByt</h1>
+                
+                <section id="introducao">
+                    <h2>Introdução</h2>
+                    <p>Bem-vindo ao manual do usuário da integração Lightning Network do PayByt! Este manual explica como utilizar os novos recursos de pagamento via Lightning Network, verificação de entrega e sistema de taxas implementados no marketplace PayByt.</p>
+                </section>
+                
+                <section id="lightning-network">
+                    <h2>O que é Lightning Network?</h2>
+                    <p>Lightning Network é uma solução de segunda camada para o Bitcoin que permite transações instantâneas e com taxas extremamente baixas. Ao contrário das transações Bitcoin tradicionais (on-chain), que podem levar minutos ou horas para serem confirmadas, as transações Lightning são confirmadas em segundos.</p>
+                    
+                    <div class="info-box">
+                        <p><strong>Vantagens da Lightning Network:</strong></p>
+                        <ul>
+                            <li>Transações instantâneas (confirmação em segundos)</li>
+                            <li>Taxas extremamente baixas (frações de centavo)</li>
+                            <li>Alta escalabilidade (milhões de transações por segundo)</li>
+                            <li>Privacidade aprimorada</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="recursos">
+                    <h2>Recursos Principais</h2>
+                    <ul>
+                        <li><strong>Pagamentos Lightning Network</strong>: Transações rápidas e com baixas taxas</li>
+                        <li><strong>Verificação Automática de Entrega</strong>: Confirmação segura de entregas físicas e digitais</li>
+                        <li><strong>Sistema de Taxas Transparente</strong>: Taxa fixa de 1% da plataforma</li>
+                    </ul>
+                </section>
+                
+                <section id="pagamentos">
+                    <h2>Como Realizar um Pagamento via Lightning Network</h2>
+                    
+                    <section id="compradores">
+                        <h3>Para Compradores</h3>
+                        <ol>
+                            <li><strong>Selecione um produto</strong> no marketplace PayByt</li>
+                            <li>No checkout, escolha <strong>"Pagar com Lightning Network"</strong></li>
+                            <li>O sistema gerará uma <strong>fatura Lightning</strong> com um QR code</li>
+                            <li>Abra sua <strong>carteira Lightning</strong> (como Wallet of Satoshi, Muun, Phoenix, etc.)</li>
+                            <li>Escaneie o QR code ou copie o código de pagamento</li>
+                            <li>Confirme o pagamento na sua carteira</li>
+                            <li>A página de checkout será atualizada automaticamente quando o pagamento for confirmado</li>
+                        </ol>
+                        
+                        <div class="tip-box">
+                            <p><strong>Dica:</strong> Se você não tiver uma carteira Lightning, consulte a seção <a href="#faq">Perguntas Frequentes</a> para recomendações de carteiras.</p>
+                        </div>
+                    </section>
+                    
+                    <section id="vendedores">
+                        <h3>Para Vendedores</h3>
+                        <ol>
+                            <li>Quando um comprador paga com Lightning Network, você receberá uma <strong>notificação</strong></li>
+                            <li>O valor ficará em <strong>escrow</strong> até a confirmação da entrega</li>
+                            <li>Para produtos físicos, <strong>registre o código de rastreio</strong> no sistema</li>
+                            <li>Para produtos digitais, <strong>envie a chave de ativação ou link de download</strong></li>
+                            <li>Quando a entrega for confirmada, os fundos serão <strong>liberados automaticamente</strong></li>
+                        </ol>
+                        
+                        <div class="warning-box">
+                            <p><strong>Importante:</strong> Registre o código de rastreio correto e a transportadora para garantir a verificação automática da entrega.</p>
+                        </div>
+                    </section>
+                </section>
+                
+                <section id="verificacao">
+                    <h2>Verificação de Entrega</h2>
+                    
+                    <section id="produtos-fisicos">
+                        <h3>Produtos Físicos</h3>
+                        <ol>
+                            <li>O vendedor registra o <strong>código de rastreio</strong> e a <strong>transportadora</strong></li>
+                            <li>O sistema monitora automaticamente o status da entrega</li>
+                            <li>Quando a entrega é confirmada, os fundos são liberados para o vendedor</li>
+                            <li>Alternativamente, o entregador pode escanear um <strong>QR code de confirmação</strong> no momento da entrega</li>
+                        </ol>
+                        
+                        <div class="info-box">
+                            <p><strong>Transportadoras suportadas:</strong> Correios, DHL, UPS, FedEx, entre outras.</p>
+                        </div>
+                    </section>
+                    
+                    <section id="produtos-digitais">
+                        <h3>Produtos Digitais</h3>
+                        <ol>
+                            <li>O vendedor envia a <strong>chave de ativação</strong> ou <strong>link de download</strong> via plataforma</li>
+                            <li>O comprador confirma o recebimento clicando em <strong>"Confirmar Recebimento"</strong></li>
+                            <li>Se o comprador não confirmar em 7 dias, o sistema confirma automaticamente</li>
+                            <li>Para produtos que exigem prova de abertura, o sistema registra uma <strong>prova criptográfica</strong> no IPFS</li>
+                        </ol>
+                        
+                        <div class="tip-box">
+                            <p><strong>Dica para vendedores:</strong> Forneça instruções claras sobre como utilizar o produto digital para evitar disputas.</p>
+                        </div>
+                    </section>
+                </section>
+                
+                <section id="taxas">
+                    <h2>Sistema de Taxas</h2>
+                    <p>O PayByt cobra uma taxa fixa de <strong>1% sobre o valor da transação</strong>. Esta taxa é transparente e é exibida durante o checkout.</p>
+                    
+                    <h3>Composição da Taxa</h3>
+                    <ul>
+                        <li><strong>Taxa da Plataforma</strong>: 1% do valor da transação</li>
+                        <li><strong>Taxa de Rede</strong>: Varia conforme o método de pagamento
+                            <ul>
+                                <li>Lightning Network: Aproximadamente 0.1% (muito baixa)</li>
+                                <li>Bitcoin on-chain: Varia conforme o congestionamento da rede</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h3>Exemplo de Cálculo</h3>
+                    <p>Para uma compra de 0.01 BTC:</p>
+                    <ul>
+                        <li>Taxa da Plataforma (1%): 0.0001 BTC</li>
+                        <li>Taxa de Rede Lightning (aproximada): 0.00001 BTC</li>
+                        <li>Total de Taxas: 0.00011 BTC</li>
+                        <li>Valor Total: 0.01011 BTC</li>
+                    </ul>
+                </section>
+                
+                <section id="faq">
+                    <h2>Perguntas Frequentes</h2>
+                    
+                    <h3>Como criar uma carteira Lightning Network?</h3>
+                    <p>Recomendamos as seguintes carteiras Lightning Network:</p>
+                    <ul>
+                        <li><a href="https://www.walletofsatoshi.com/" target="_blank">Wallet of Satoshi</a> (mais fácil para iniciantes)</li>
+                        <li><a href="https://phoenix.acinq.co/" target="_blank">Phoenix</a> (boa segurança e facilidade de uso)</li>
+                        <li><a href="https://muun.com/" target="_blank">Muun</a> (suporta tanto Bitcoin on-chain quanto Lightning)</li>
+                        <li><a href="https://breez.technology/" target="_blank">Breez</a> (recursos avançados)</li>
+                    </ul>
+                    
+                    <h3>O que fazer se o pagamento Lightning falhar?</h3>
+                    <ol>
+                        <li>Verifique sua conexão com a internet</li>
+                        <li>Certifique-se de que sua carteira tem saldo suficiente</li>
+                        <li>Tente novamente ou escolha "Gerar Nova Fatura"</li>
+                        <li>Se o problema persistir, tente usar outra carteira Lightning</li>
+                    </ol>
+                    
+                    <h3>Como saber se meu pagamento foi confirmado?</h3>
+                    <p>A página de checkout será atualizada automaticamente quando o pagamento for confirmado. Você também receberá uma notificação por e-mail.</p>
+                    
+                    <h3>Como funciona a verificação de entrega?</h3>
+                    <p>Para produtos físicos, o sistema monitora automaticamente o código de rastreio. Para produtos digitais, o comprador confirma o recebimento ou o sistema confirma automaticamente após 7 dias.</p>
+                    
+                    <h3>O que acontece se a entrega não for confirmada?</h3>
+                    <p>Se houver problemas com a entrega, o comprador pode abrir uma disputa. Um mediador analisará o caso e decidirá se os fundos devem ser liberados para o vendedor ou devolvidos ao comprador.</p>
+                    
+                    <h3>Como são utilizadas as taxas da plataforma?</h3>
+                    <p>As taxas da plataforma são distribuídas da seguinte forma:</p>
+                    <ul>
+                        <li>40% para operações da plataforma</li>
+                        <li>30% para desenvolvimento contínuo</li>
+                        <li>20% para segurança e auditorias</li>
+                        <li>10% para a comunidade</li>
+                    </ul>
+                </section>
+                
+                <section id="suporte">
+                    <h2>Suporte</h2>
+                    <p>Se você tiver dúvidas ou problemas, entre em contato com nossa equipe de suporte:</p>
+                    <ul>
+                        <li>E-mail: suporte@paybyt.com</li>
+                        <li>Chat: Disponível no site</li>
+                        <li>Telegram: @PayBytSupport</li>
+                    </ul>
+                </section>
+                
+                <section id="glossario">
+                    <h2>Glossário</h2>
+                    <ul>
+                        <li><strong>Lightning Network</strong>: Solução de segunda camada para Bitcoin que permite transações rápidas e baratas</li>
+                        <li><strong>BOLT11</strong>: Formato padrão para faturas Lightning Network</li>
+                        <li><strong>Escrow</strong>: Sistema de custódia que protege tanto o comprador quanto o vendedor</li>
+                        <li><strong>Oráculo</strong>: Sistema que verifica informações do mundo real e as transmite para o blockchain</li>
+                        <li><strong>IPFS</strong>: Sistema de armazenamento distribuído usado para armazenar provas de entrega</li>
+                        <li><strong>Satoshi</strong>: A menor unidade do Bitcoin (1 BTC = 100.000.000 satoshis)</li>
+                    </ul>
+                </section>
+                
+                <div style="margin-top: 40px;">
+                    <a href="index.html" class="btn">Voltar para a Página Inicial</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container footer-content">
+            <p>© 2025 PayByt. Todos os direitos reservados.</p>
+            <p>Marketplace descentralizado com Bitcoin</p>
+        </div>
+    </footer>
+</body>
+</html>

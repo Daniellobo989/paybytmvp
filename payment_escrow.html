@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayByt - Pagamento Lightning com Escrow</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f4f4;
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    header {
+      background-color: #002D72;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .logo {
+      height: 60px;
+      margin-right: 10px;
+    }
+    header h1 {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 2.5rem;
+    }
+    .bitcoin-accent {
+      color: #F7931A;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #F7931A;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+      background-color: #e67e00;
+    }
+    footer {
+      background-color: #002D72;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
+    
+    /* Estilos para a página de pagamento */
+    .payment-container {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      margin: 40px 0;
+      padding: 30px;
+    }
+    
+    .payment-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .payment-title {
+      color: #002D72;
+      margin-bottom: 10px;
+    }
+    
+    .payment-subtitle {
+      color: #666;
+      font-weight: normal;
+    }
+    
+    .payment-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .payment-steps::before {
+      content: "";
+      position: absolute;
+      top: 24px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: #ddd;
+      z-index: 1;
+    }
+    
+    .payment-step {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .step-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background-color: #f4f4f4;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      font-weight: bold;
+      color: #666;
+      border: 2px solid #ddd;
+    }
+    
+    .step-number.active {
+      background-color: #F7931A;
+      color: white;
+      border-color: #F7931A;
+    }
+    
+    .step-number.completed {
+      background-color: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+    
+    .step-text {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .payment-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .payment-product {
+      flex-basis: 300px;
+      flex-grow: 1;
+    }
+    
+    .product-image {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .product-name {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #002D72;
+    }
+    
+    .product-price {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #F7931A;
+      margin-bottom: 15px;
+    }
+    
+    .payment-summary {
+      flex-basis: 300px;
+      flex-grow: 1;
+    }
+    
+    .summary-title {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #002D72;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .summary-label {
+      color: #666;
+    }
+    
+    .summary-value {
+      font-weight: bold;
+    }
+    
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding-top: 10px;
+      border-top: 2px solid #eee;
+      font-size: 1.2rem;
+    }
+    
+    .summary-total-label {
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .summary-total-value {
+      font-weight: bold;
+      color: #F7931A;
+    }
+    
+    .payment-qr {
+      flex-basis: 300px;
+      flex-grow: 1;
+      text-align: center;
+    }
+    
+    .qr-title {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #002D72;
+    }
+    
+    .qr-code {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 15px;
+    }
+    
+    .qr-instructions {
+      margin-bottom: 15px;
+      color: #666;
+    }
+    
+    .qr-address {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+      margin-bottom: 15px;
+      word-break: break-all;
+    }
+    
+    .payment-status {
+      padding: 15px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    
+    .payment-status.pending {
+      background-color: #fff8e1;
+      color: #856404;
+    }
+    
+    .payment-status.success {
+      background-color: #e8f5e9;
+      color: #155724;
+      display: none;
+    }
+    
+    .payment-timer {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+    
+    .escrow-info {
+      background-color: #e8f5e9;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 30px;
+    }
+    
+    .escrow-title {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #155724;
+    }
+    
+    .escrow-description {
+      color: #155724;
+      margin-bottom: 15px;
+    }
+    
+    .escrow-keys {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .escrow-key {
+      flex-basis: 200px;
+      flex-grow: 1;
+      background-color: white;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .key-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #155724;
+    }
+    
+    .key-value {
+      font-family: monospace;
+      font-size: 0.8rem;
+      word-break: break-all;
+      color: #333;
+    }
+    
+    .payment-actions {
+      text-align: center;
+      margin-top: 30px;
+    }
+    
+    .action-button {
+      background-color: #F7931A;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .action-button:hover {
+      background-color: #e67e00;
+    }
+    
+    .action-button.secondary {
+      background-color: #6c757d;
+    }
+    
+    .action-button.secondary:hover {
+      background-color: #5a6268;
+    }
+    
+    .next-step-button {
+      display: none;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .payment-details {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <img src="https://raw.githubusercontent.com/Daniellobo989/paybytmvp/main/logo.png" alt="PayByt Logo" class="logo">
+      <h1>PayByt</h1>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="payment-container">
+      <div class="payment-header">
+        <h1 class="payment-title">Pagamento com Bitcoin Lightning Network</h1>
+        <h2 class="payment-subtitle">Protegido por Escrow Multisig 2-de-3</h2>
+      </div>
+      
+      <div class="payment-steps">
+        <div class="payment-step">
+          <div class="step-number completed">1</div>
+          <div class="step-text">Seleção do Produto</div>
+        </div>
+        <div class="payment-step">
+          <div class="step-number active">2</div>
+          <div class="step-text">Pagamento com Escrow</div>
+        </div>
+        <div class="payment-step">
+          <div class="step-number">3</div>
+          <div class="step-text">Verificação de Entrega</div>
+        </div>
+      </div>
+      
+      <div class="payment-details">
+        <div class="payment-product">
+          <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="iPhone 13 Pro" class="product-image">
+          <h3 class="product-name">iPhone 13 Pro - 256GB</h3>
+          <p class="product-price">0.015 BTC</p>
+          <p>Vendedor: BitTech Store</p>
+          <p>Avaliação: ★★★★★ (128 avaliações)</p>
+        </div>
+        
+        <div class="payment-summary">
+          <h3 class="summary-title">Resumo da Compra</h3>
+          <div class="summary-row">
+            <span class="summary-label">Produto:</span>
+            <span class="summary-value">iPhone 13 Pro - 256GB</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Preço:</span>
+            <span class="summary-value">0.015 BTC</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Taxa de escrow (1%):</span>
+            <span class="summary-value">0.00015 BTC</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Taxa de rede:</span>
+            <span class="summary-value">0.00001 BTC</span>
+          </div>
+          <div class="summary-total">
+            <span class="summary-total-label">Total:</span>
+            <span class="summary-total-value">0.01516 BTC</span>
+          </div>
+        </div>
+        
+        <div class="payment-qr">
+          <h3 class="qr-title">Escaneie o QR Code para pagar</h3>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=lightning:lnbc1516n1p38q73d" alt="QR Code de Pagamento Lightning" class="qr-code">
+          <p class="qr-instructions">Use sua carteira Lightning Network para escanear o código acima ou copie a invoice abaixo:</p>
+          <div class="qr-address">lnbc1516n1p38q73dsp5z70aqqnqdqqnqdqqnqdqqnqdqqnqdqqnqdqqnqdqqnqdqqnqdqqnqdqsrzjqw</div>
+          <div class="payment-status pending" id="payment-status">Aguardando pagamento...</div>
+          <div class="payment-timer" id="payment-timer">Expira em: 15:00</div>
+        </div>
+      </div>
+      
+      <div class="escrow-info">
+        <h3 class="escrow-title">Informações do Escrow Multisig 2-de-3</h3>
+        <p class="escrow-description">Seu pagamento será protegido por um contrato multisig 2-de-3, onde são necessárias 2 de 3 assinaturas para liberar os fundos. As chaves são distribuídas entre você (comprador), o vendedor e o mediador PayByt.</p>
+        <div class="escrow-keys">
+          <div class="escrow-key">
+            <div class="key-label">Chave do Comprador:</div>
+            <div class="key-value">03a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h</div>
+          </div>
+          <div class="escrow-key">
+            <div class="key-label">Chave do Vendedor:</div>
+            <div class="key-value">02z9y8x7w6v5u4t3s2r1q0p9o8n7m6l5k4j3i2h1g0f9e8d7c6b5a4z3y2x1w0v9u8t7s6r</div>
+          </div>
+          <div class="escrow-key">
+            <div class="key-label">Chave do Mediador:</div>
+            <div class="key-value">025t4r3e2w1q0p9o8i7u6y5t4r3e2w1q0p9o8i7u6y5t4r3e2w1q0p9o8i7u6y5t4r3e2w</div>
+          </div>
+        </div>
+        <p>Endereço do Escrow: bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</p>
+      </div>
+      
+      <div class="payment-actions">
+        <button class="action-button" onclick="simulatePayment()">Simular Pagamento</button>
+        <button class="action-button secondary" onclick="window.location.href='paybyt_homepage.html'">Cancelar</button>
+        <a href="redirect.html" class="action-button next-step-button" id="next-step-button">Prosseguir para Verificação de Entrega</a>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <div class="container">
+      <p>© 2025 PayByt - Todos os direitos reservados</p>
+      <p>O marketplace descentralizado com Bitcoin como única forma de pagamento</p>
+    </div>
+  </footer>
+  
+  <script>
+    // Timer para expiração do pagamento
+    let timerInterval;
+    function startTimer() {
+      let timeLeft = 15 * 60; // 15 minutos em segundos
+      const timerElement = document.getElementById('payment-timer');
+      
+      clearInterval(timerInterval);
+      
+      timerInterval = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        timerElement.textContent = `Expira em: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          timerElement.textContent = 'Expirado';
+          document.getElementById('payment-status').textContent = 'Pagamento expirado';
+          document.getElementById('payment-status').className = 'payment-status expired';
+        }
+        
+        timeLeft--;
+      }, 1000);
+    }
+    
+    // Iniciar o timer quando a página carrega
+    window.onload = function() {
+      startTimer();
+    };
+    
+    // Função para simular pagamento (apenas para demonstração)
+    function simulatePayment() {
+      clearInterval(timerInterval);
+      document.getElementById('payment-status').textContent = 'Pagamento confirmado! Fundos depositados no escrow multisig.';
+      document.getElementById('payment-status').className = 'payment-status success';
+      document.getElementById('payment-status').style.display = 'block';
+      document.getElementById('payment-timer').textContent = 'Transação concluída com sucesso';
+      
+      // Mostrar botão para próxima etapa
+      document.getElementById('next-step-button').style.display = 'inline-block';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayByt - Detalhes do Produto</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f4f4;
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    header {
+      background-color: #002D72;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .logo {
+      height: 60px;
+      margin-right: 10px;
+    }
+    header h1 {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 2.5rem;
+    }
+    .bitcoin-accent {
+      color: #F7931A;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #F7931A;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+      background-color: #e67e00;
+    }
+    footer {
+      background-color: #002D72;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
+    
+    /* Estilos para a página de detalhes do produto */
+    .product-detail {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      margin: 40px 0;
+      overflow: hidden;
+    }
+    
+    .product-detail-container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .product-images {
+      flex-basis: 50%;
+      padding: 30px;
+    }
+    
+    .product-main-image {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .product-thumbnails {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .product-thumbnail {
+      width: 80px;
+      height: 80px;
+      border-radius: 5px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.3s;
+    }
+    
+    .product-thumbnail:hover {
+      border-color: #F7931A;
+    }
+    
+    .product-info {
+      flex-basis: 50%;
+      padding: 30px;
+    }
+    
+    .product-category {
+      display: inline-block;
+      background-color: #f0f0f0;
+      color: #666;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+    
+    .product-title {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #002D72;
+    }
+    
+    .product-rating {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .product-stars {
+      color: #F7931A;
+      margin-right: 5px;
+      font-size: 1.2rem;
+    }
+    
+    .product-reviews {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .product-price {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #F7931A;
+      margin-bottom: 20px;
+    }
+    
+    .product-description {
+      margin-bottom: 30px;
+      color: #555;
+    }
+    
+    .product-features {
+      margin-bottom: 30px;
+    }
+    
+    .product-features h3 {
+      margin-bottom: 10px;
+      color: #002D72;
+    }
+    
+    .product-features ul {
+      list-style-type: none;
+    }
+    
+    .product-features li {
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+    
+    .product-features li:before {
+      content: "✓";
+      color: #F7931A;
+      position: absolute;
+      left: 0;
+    }
+    
+    .product-actions {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .quantity-selector {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    
+    .quantity-btn {
+      background-color: #f0f0f0;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+    
+    .quantity-input {
+      width: 50px;
+      border: none;
+      text-align: center;
+      font-size: 1rem;
+      padding: 10px 0;
+    }
+    
+    .buy-button {
+      flex-grow: 1;
+      background-color: #F7931A;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .buy-button:hover {
+      background-color: #e67e00;
+    }
+    
+    .product-meta {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      font-size: 0.9rem;
+      color: #777;
+    }
+    
+    .product-meta p {
+      margin-bottom: 5px;
+    }
+    
+    .seller-info {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+    
+    .seller-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+    
+    .seller-name {
+      font-weight: bold;
+      color: #002D72;
+    }
+    
+    .seller-rating {
+      color: #F7931A;
+      margin-top: 5px;
+    }
+    
+    /* Estilos para o modal de pagamento */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      padding: 30px;
+      position: relative;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #777;
+    }
+    
+    .payment-title {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #002D72;
+    }
+    
+    .payment-details {
+      margin-bottom: 30px;
+    }
+    
+    .payment-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .payment-label {
+      font-weight: bold;
+      color: #555;
+    }
+    
+    .payment-value {
+      color: #333;
+    }
+    
+    .payment-total {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #F7931A;
+    }
+    
+    .payment-methods {
+      margin-bottom: 30px;
+    }
+    
+    .payment-method {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+    
+    .payment-method:hover {
+      border-color: #F7931A;
+    }
+    
+    .payment-method.active {
+      border-color: #F7931A;
+      background-color: #fff8f0;
+    }
+    
+    .payment-method-icon {
+      font-size: 1.5rem;
+      margin-right: 15px;
+      color: #F7931A;
+    }
+    
+    .payment-method-details {
+      flex-grow: 1;
+    }
+    
+    .payment-method-title {
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .payment-method-description {
+      font-size: 0.9rem;
+      color: #777;
+    }
+    
+    .payment-actions {
+      text-align: center;
+    }
+    
+    .confirm-payment-btn {
+      background-color: #F7931A;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .confirm-payment-btn:hover {
+      background-color: #e67e00;
+    }
+    
+    /* Estilos para o QR code */
+    .qr-container {
+      display: none;
+      text-align: center;
+      margin-top: 30px;
+    }
+    
+    .qr-code {
+      margin: 0 auto 20px;
+      max-width: 200px;
+    }
+    
+    .qr-instructions {
+      margin-bottom: 20px;
+      color: #555;
+    }
+    
+    .payment-status {
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    
+    .payment-status.pending {
+      background-color: #fff8e1;
+      color: #856404;
+    }
+    
+    .payment-status.success {
+      background-color: #e8f5e9;
+      color: #155724;
+    }
+    
+    .payment-timer {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+    
+    @media (max-width: 768px) {
+      .product-detail-container {
+        flex-direction: column;
+      }
+      
+      .product-images, .product-info {
+        flex-basis: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <img src="logo.png" alt="PayByt Logo" class="logo">
+      <h1>PayByt</h1>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="product-detail">
+      <div class="product-detail-container">
+        <div class="product-images">
+          <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="iPhone 13 Pro" class="product-main-image" id="main-image">
+          <div class="product-thumbnails">
+            <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="iPhone 13 Pro - Frente" class="product-thumbnail" onclick="changeImage(this.src)">
+            <img src="https://images.unsplash.com/photo-1606041011872-596597976b25?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="iPhone 13 Pro - Traseira" class="product-thumbnail" onclick="changeImage(this.src)">
+            <img src="https://images.unsplash.com/photo-1581795669633-91ef7c9699a8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="iPhone 13 Pro - Lateral" class="product-thumbnail" onclick="changeImage(this.src)">
+          </div>
+        </div>
+        
+        <div class="product-info">
+          <span class="product-category">Eletrônicos</span>
+          <h1 class="product-title">iPhone 13 Pro - 256GB</h1>
+          <div class="product-rating">
+            <span class="product-stars">★★★★★</span>
+            <span class="product-reviews">(128 avaliações)</span>
+          </div>
+          <p class="product-price">0.015 BTC</p>
+          <div class="product-description">
+            <p>iPhone 13 Pro com 256GB de armazenamento, câmera tripla de 12MP e tela Super Retina XDR de 6.1". Disponível na cor Azul Sierra.</p>
+            <p>Produto novo, lacrado, com garantia de 1 ano diretamente com a Apple.</p>
+          </div>
+          
+          <div class="product-features">
+            <h3>Características</h3>
+            <ul>
+              <li>Processador A15 Bionic</li>
+              <li>Tela Super Retina XDR de 6.1"</li>
+              <li>Câmera tripla de 12MP (Ultra-angular, Grande-angular e Teleobjetiva)</li>
+              <li>256GB de armazenamento</li>
+              <li>Face ID para autenticação segura</li>
+              <li>Resistente à água (IP68)</li>
+            </ul>
+          </div>
+          
+          <div class="product-actions">
+            <div class="quantity-selector">
+              <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+              <input type="text" class="quantity-input" id="quantity" value="1" readonly>
+              <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+            </div>
+            <button class="buy-button" onclick="openPaymentModal()">Comprar com Bitcoin</button>
+          </div>
+          
+          <div class="seller-info">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Vendedor" class="seller-avatar">
+            <div>
+              <p class="seller-name">BitTech Store</p>
+              <p class="seller-rating">★★★★★ (352 vendas)</p>
+            </div>
+          </div>
+          
+          <div class="product-meta">
+            <p><strong>ID do Produto:</strong> IPHONE13PRO-256-BLUE</p>
+            <p><strong>Categoria:</strong> Eletrônicos > Smartphones > Apple</p>
+            <p><strong>Disponibilidade:</strong> Em estoque (12 unidades)</p>
+            <p><strong>Envio:</strong> Internacional (5-10 dias úteis)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de Pagamento -->
+  <div class="modal" id="payment-modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closePaymentModal()">&times;</span>
+      <h2 class="payment-title">Finalizar Compra</h2>
+      
+      <div class="payment-details">
+        <div class="payment-row">
+          <span class="payment-label">Produto:</span>
+          <span class="payment-value">iPhone 13 Pro - 256GB</span>
+        </div>
+        <div class="payment-row">
+          <span class="payment-label">Quantidade:</span>
+          <span class="payment-value" id="modal-quantity">1</span>
+        </div>
+        <div class="payment-row">
+          <span class="payment-label">Preço unitário:</span>
+          <span class="payment-value">0.015 BTC</span>
+        </div>
+        <div class="payment-row">
+          <span class="payment-label">Taxa de escrow (1%):</span>
+          <span class="payment-value">0.00015 BTC</span>
+        </div>
+        <div class="payment-row">
+          <span class="payment-label">Total:</span>
+          <span class="payment-value payment-total" id="modal-total">0.01515 BTC</span>
+        </div>
+      </div>
+      
+      <div class="payment-methods">
+        <h3>Escolha o método de pagamento:</h3>
+        <div class="payment-method active" onclick="selectPaymentMethod(this, 'bitcoin')">
+          <div class="payment-method-icon">₿</div>
+          <div class="payment-method-details">
+            <div class="payment-method-title">Bitcoin (on-chain)</div>
+            <div class="payment-method-description">Pagamento tradicional via blockchain do Bitcoin. Tempo de confirmação: ~10-60 minutos.</div>
+          </div>
+        </div>
+        <div class="payment-method" onclick="selectPaymentMethod(this, 'lightning')">
+          <div class="payment-method-icon">⚡</div>
+          <div class="payment-method-details">
+            <div class="payment-method-title">Lightning Network</div>
+            <div class="payment-method-description">Pagamento instantâneo via Lightning Network. Tempo de confirmação: segundos.</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="payment-actions">
+        <button class="confirm-payment-btn" onclick="showQRCode()">Confirmar Pagamento</button>
+      </div>
+      
+      <div class="qr-container" id="qr-container">
+        <h3>Escaneie o QR Code para pagar</h3>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bitcoin:bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh?amount=0.01515" alt="QR Code de Pagamento" class="qr-code" id="qr-code">
+        <p class="qr-instructions">Use sua carteira Bitcoin para escanear o código acima ou copie o endereço abaixo:</p>
+        <p><code>bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code></p>
+        <div class="payment-status pending" id="payment-status">Aguardando pagamento...</div>
+        <div class="payment-timer" id="payment-timer">Expira em: 15:00</div>
+        
+        <!-- Botões apenas para demonstração -->
+        <div style="margin-top: 20px;">
+          <button class="confirm-payment-btn" onclick="simulatePayment()">Simular Pagamento</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <div class="container">
+      <p>© 2025 PayByt - Todos os direitos reservados</p>
+      <p>O marketplace descentralizado com Bitcoin como única forma de pagamento</p>
+    </div>
+  </footer>
+  
+  <script>
+    // Funções para manipulação da quantidade
+    function increaseQuantity() {
+      const quantityInput = document.getElementById('quantity');
+      let quantity = parseInt(quantityInput.value);
+      quantityInput.value = quantity + 1;
+      updateTotal();
+    }
+    
+    function decreaseQuantity() {
+      const quantityInput = document.getElementById('quantity');
+      let quantity = parseInt(quantityInput.value);
+      if (quantity > 1) {
+        quantityInput.value = quantity - 1;
+        updateTotal();
+      }
+    }
+    
+    // Função para atualizar o total
+    function updateTotal() {
+      const quantity = parseInt(document.getElementById('quantity').value);
+      const unitPrice = 0.015;
+      const fee = unitPrice * quantity * 0.01; // Taxa de 1%
+      const total = (unitPrice * quantity + fee).toFixed(5);
+      
+      // Atualizar no modal quando aberto
+      document.getElementById('modal-quantity').textContent = quantity;
+      document.getElementById('modal-total').textContent = total + ' BTC';
+      
+      // Atualizar QR code com novo valor
+      const qrCode = document.getElementById('qr-code');
+      qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bitcoin:bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh?amount=${total}`;
+    }
+    
+    // Funções para o modal de pagamento
+    function openPaymentModal() {
+      updateTotal();
+      document.getElementById('payment-modal').style.display = 'flex';
+    }
+    
+    function closePaymentModal() {
+      document.getElementById('payment-modal').style.display = 'none';
+      document.getElementById('qr-container').style.display = 'none';
+    }
+    
+    // Função para selecionar método de pagamento
+    function selectPaymentMethod(element, method) {
+      // Remover classe active de todos os métodos
+      const methods = document.getElementsByClassName('payment-method');
+      for (let i = 0; i < methods.length; i++) {
+        methods[i].classList.remove('active');
+      }
+      
+      // Adicionar classe active ao método selecionado
+      element.classList.add('active');
+      
+      // Atualizar QR code baseado no método
+      const qrCode = document.getElementById('qr-code');
+      if (method === 'lightning') {
+        qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=lightning:lnbc${(parseFloat(document.getElementById('modal-total').textContent) * 100000000).toFixed(0)}n1p38q73d`;
+      } else {
+        const total = document.getElementById('modal-total').textContent.split(' ')[0];
+        qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bitcoin:bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh?amount=${total}`;
+      }
+    }
+    
+    // Função para mostrar QR code
+    function showQRCode() {
+      document.getElementById('qr-container').style.display = 'block';
+      startTimer();
+    }
+    
+    // Função para mudar a imagem principal
+    function changeImage(src) {
+      document.getElementById('main-image').src = src;
+    }
+    
+    // Timer para expiração do pagamento
+    let timerInterval;
+    function startTimer() {
+      let timeLeft = 15 * 60; // 15 minutos em segundos
+      const timerElement = document.getElementById('payment-timer');
+      
+      clearInterval(timerInterval);
+      
+      timerInterval = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        timerElement.textContent = `Expira em: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          timerElement.textContent = 'Expirado';
+          document.getElementById('payment-status').textContent = 'Pagamento expirado';
+          document.getElementById('payment-status').className = 'payment-status expired';
+        }
+        
+        timeLeft--;
+      }, 1000);
+    }
+    
+    // Função para simular pagamento (apenas para demonstração)
+    function simulatePayment() {
+      clearInterval(timerInterval);
+      document.getElementById('payment-status').textContent = 'Pagamento confirmado!';
+      document.getElementById('payment-status').className = 'payment-status success';
+      document.getElementById('payment-timer').textContent = 'Transação concluída com sucesso';
+      
+      // Redirecionar para a página de confirmação após 3 segundos
+      setTimeout(() => {
+        window.location.href = 'unified.html';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
